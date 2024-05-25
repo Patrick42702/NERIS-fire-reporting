@@ -5,3 +5,4 @@
 * 'PASSWORD' , password for that user<br>
 * 'HOST' , the host ip of the database<br>
 * 'PORT' , the port of the database that it is hosted on<br>
+* 'DEBUG' , the debug value for django server

@@ -8,6 +8,12 @@ services:
     env_file:
       - ./env/pgsql.env
     container_name: pgsql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./server/
     ports:
@@ -17,8 +23,10 @@ services:
     env_file:
       ./server/.env
     depends_on:
-    - pgsql
+      pgsql:
+        condition: service_healthy
     container_name: neris-server
+
   frontend:
     build: ./client/
     ports:

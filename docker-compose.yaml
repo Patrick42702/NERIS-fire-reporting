@@ -26,6 +26,11 @@ services:
     volumes:
       - ./client/src:/app/src
       - /app/node_modules
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    container_name: neris-client
 
 volumes:
   neris:

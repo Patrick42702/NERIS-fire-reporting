@@ -1,0 +1,25 @@
+name: neris-fire
+
+services:
+  pgsql:
+    image: 'postgres'
+    volumes:
+      - neris:/var/lib/postgresql/data
+    env_file:
+      - ./env/pgsql.env
+    container_name: pgsql
+  backend:
+    build: ./server/
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./server/nerisfire:/app/nerisfire
+    env_file:
+      ./server/.env
+    depends_on:
+    - pgsql
+    container_name: neris-server
+
+volumes:
+  neris:
+#frontend:

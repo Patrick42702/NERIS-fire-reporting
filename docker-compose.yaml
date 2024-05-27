@@ -19,7 +19,13 @@ services:
     depends_on:
     - pgsql
     container_name: neris-server
+  frontend:
+    build: ./client/
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client/src:/app/src
+      - /app/node_modules
 
 volumes:
   neris:
-#frontend:

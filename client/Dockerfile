@@ -1,11 +1,14 @@
-FROM node
+FROM node:alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json .
 
+RUN npm cache clean --force
 RUN npm install
 
 COPY . .
 
-CMD [ "npm", "run", "dev", "--host"]
+EXPOSE 3000
+
+CMD [ "npm", "run", "dev", "--", "--host"]

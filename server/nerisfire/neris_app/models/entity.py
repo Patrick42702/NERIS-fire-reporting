@@ -2,7 +2,7 @@ from django.db import models
 
 class Dept(models.Model):
     description = models.TextField(null=False) # type: ignore
-    nerid_id = models.CharField(max_length=20) # type: ignore
+    neris_id = models.CharField(max_length=20) # type: ignore
 
 
 class DeptHist(models.Model):

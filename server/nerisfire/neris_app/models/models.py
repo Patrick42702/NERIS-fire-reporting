@@ -35,3 +35,18 @@
 #     email = models.EmailField(default='')
 #     created_at = models.DateTimeField(default=timezone.now)
 #
+
+from django.db import models
+import uuid
+
+class Organization(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    dept_name = models.CharField(max_length=255, null=False)
+    location = models.CharField(max_length=255)
+    fdid = models.IntegerField(null=False)
+    verified = models.BooleanField(default=False, null=False)
+
+    def __str__(self):
+        return self.dept_name
+
+    

@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   return (
     <MainLayout>
-      <Link to="/dashboard" className={buttonVariants()}>
-        Dashboard
+      <Link to="/admin" className={buttonVariants()}>
+        Admin
       </Link>
     </MainLayout>
   );

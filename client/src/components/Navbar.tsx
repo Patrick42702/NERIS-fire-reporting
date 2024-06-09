@@ -17,7 +17,7 @@ const Navbar = () => {
         </Link>
 
         <button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/sign-in")}
           className="mt-0 border-2 border-primary px-4 py-1 sm:px-6 sm:py-2 rounded-full text-primary font-semibold transition-all duration-300 hover:bg-primary hover:text-white"
         >
           Sign in

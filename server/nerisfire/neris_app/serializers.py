@@ -1,12 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Member
 from django.contrib.auth.models import Group, User
 
-class MemberSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Member
-        fields = ["url", "first_name", "last_name", "date_of_birth"]
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     email = serializers.EmailField(
@@ -44,4 +39,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = ['url', 'name']
+        fields = ["url", "name"]

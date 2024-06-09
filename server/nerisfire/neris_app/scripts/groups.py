@@ -1,5 +1,5 @@
 # this file will be used to create our groups and add them into the database
-from ..models import Developer, CompanyAdmin, Moderator, Member
+from ..models import Developer, CompanyAdmin, Moderator
 from django.contrib.auth.models import Group
 
 # Define your group names

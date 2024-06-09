@@ -1,9 +1,7 @@
 from django.db import models
 
 class Dept(models.Model):
-    description = models.TextField(null=False) # type: ignore
     neris_id = models.CharField(max_length=20, primary_key=True, null=False) # type: ignore
-    neris_id_dept = models.ForeignKey(DeptHist, on_delete=models.CASCADE, to_field='neris_id_dept')
 
 
 class DeptHist(models.Model):

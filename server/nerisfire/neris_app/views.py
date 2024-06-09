@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions, viewsets
 from .models import Member
-from .serializers import MemberSerializer
+from .serializers import MemberSerializer, UserSerializer, GroupSerializer
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
@@ -31,3 +31,19 @@ class MemberViewSet(viewsets.ModelViewSet):
         removed_count, _ = YourModel.objects.filter(name=data).delete()
 
         return Response({'message': f'{removed_count} records removed'}, status=200)
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all().order_by('name')
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]

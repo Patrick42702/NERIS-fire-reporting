@@ -10,6 +10,9 @@ import Users from "./pages/admin/Users";
 import Organizations from "./pages/admin/Organizations";
 
 import CompanyLayout from "./pages/company/CompanyLayout";
+import CompanyDashboard from "./pages/company/CompanyDashboard";
+import Incidents from "./pages/company/Incidents";
+import Leaderboard from "./pages/company/Leaderboard";
 
 function App() {
   return (
@@ -27,9 +30,13 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="organizations" element={<Organizations />} />
           </Route>
-          <Route path="/company/:id" element={<CompanyLayout />} />
+          <Route path="/company/:id" element={<CompanyLayout />}>
+            <Route index element={<CompanyDashboard />} />
+            <Route path="incidents" element={<Incidents />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
+          </Route>
         </Routes>
-        {/* Footer */}
+        {/* TODO: Footer */}
       </Router>
     </div>
   );

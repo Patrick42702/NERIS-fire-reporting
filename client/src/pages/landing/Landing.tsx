@@ -61,6 +61,19 @@ const Landing = () => {
               </div>
             </div>
 
+            {/* gradient background */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 transform-gpu overflow-hidden blur-3xl -top-10"
+            >
+              <div
+                style={{
+                  clipPath:
+                    "polygon(88.1% 44.1%, 100% 69.6%, 97.5% 26.9%, 55.5% 20.1%, 90.7% 78%, 72.5% 30.5%, 60.2% 52.4%, 52.4% 68.1%, 47.5% 38.3%, 45.2% 59.5%, 27.5% 76.7%, 0.1% 94.9%, 17.9% 100%, 27.6% 86.8%, 76.1% 97.7%, 85.1% 64.1%)",
+                }}
+                className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[deg] bg-gradient-to-tr from-primary to-red-500 opacity-35 sm:left-[calc(50%-20rem)] sm:w-[74.1875rem]"
+              />
+            </div>
             <div className="col-span-full lg:col-span-1 w-full flex justify-center px-8 sm:px-16 md:px-0 mt-32 lg:mx-0 lg:mt-20 h-fit">
               <div className="relative md:max-w-xl">
                 <img

@@ -1,6 +1,15 @@
-import { FireExtinguisher, Menu, X } from "lucide-react";
+import {
+  ClipboardPlus,
+  FireExtinguisher,
+  LayoutDashboardIcon,
+  Menu,
+  Siren,
+  Trophy,
+  Wrench,
+  X,
+} from "lucide-react";
 
-import { ADMIN_NAV_LINKS, COMPANY_NAV_LINKS } from "@/utils";
+import { ADMIN_NAV_LINKS } from "@/utils";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,12 +17,34 @@ import NavItem from "../pages/admin/components/NavItem";
 
 interface HeaderProps {
   page: "admin" | "company";
+  id?: String | undefined;
 }
 
-const Header = ({ page }: HeaderProps) => {
+const Header = ({ page, id }: HeaderProps) => {
   const [activeNavItem, setActiveNavItem] = useState("dashboard");
   const [isMenuActive, setIsMenuActive] = useState(false);
   const windowSize = useWindowSize();
+
+  const COMPANY_NAV_LINKS = [
+    {
+      name: "dashboard",
+      title: "Dashboard",
+      icon: LayoutDashboardIcon,
+      link: `/company/${id}`,
+    },
+    {
+      name: "incidents",
+      title: "Incidents",
+      icon: Siren,
+      link: `/company/${id}/incidents`,
+    },
+    {
+      name: "leaderboard",
+      title: "Leaderboard",
+      icon: Trophy,
+      link: `/company/${id}/leaderboard`,
+    },
+  ];
 
   const toggleMenuHandler = () => {
     setIsMenuActive((prevState) => !prevState);
@@ -28,7 +59,7 @@ const Header = ({ page }: HeaderProps) => {
   }, [windowSize.width]);
 
   return (
-    <header className="flex z-50 h-fit w-full items-center justify-between p-4 lg:h-full lg:max-w-[300px] lg:flex-col lg:items-start lg:justify-start lg:p-0">
+    <header className="flex static lg:fixed z-50 w-full items-center justify-between p-4 h-full lg:h-screen lg:max-w-[300px] lg:flex-col lg:items-start lg:justify-start lg:p-0">
       {/* logo */}
       <Link to="/" className="flex items-center gap-2 font-semibold lg:hidden">
         <FireExtinguisher className="h-9 w-9" />
@@ -62,7 +93,7 @@ const Header = ({ page }: HeaderProps) => {
         )}
         {/* sidebar */}
         <div
-          className={`fixed top-0 bottom-0 left-0 z-50 w-3/4 transform transition-transform duration-500 ease-in-out bg-white p-4 lg:static lg:h-full lg:w-full lg:p-6 ${
+          className={`fixed top-0 bottom-0 left-0 z-50 w-3/4 transform transition-transform duration-500 ease-in-out bg-white p-4 lg:h-screen lg:w-full lg:p-6 ${
             isMenuActive ? "translate-x-0" : "-translate-x-full"
           }`}
         >

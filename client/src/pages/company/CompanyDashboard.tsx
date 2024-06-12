@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +8,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import { useParams } from "react-router-dom";
 
-const Verifications = () => {
+const CompanyDashboard = () => {
+  const { id } = useParams();
+
   const columns = [
     {
       accessorKey: "user",
@@ -70,86 +72,21 @@ const Verifications = () => {
       email: "patrick42702@yahoo.com",
       company: "Fire Department 3",
     },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
-    {
-      id: 3,
-      user: "Patrick Muller",
-      email: "patrick42702@yahoo.com",
-      company: "Fire Department 3",
-    },
   ];
-
   return (
-    <div className="overflow-y-auto">
+    <>
       <div className="flex items-center">
         <h1 className="text-sm font-semibold md:text-lg text-primary-foreground tracking-wider uppercase">
-          Manage Verifications
+          Dashboard
         </h1>
       </div>
       <div className="w-full mx-auto mt-8 md:mt-20">
-        <DataTable
-          columns={columns}
-          data={data}
-          title="Verifications"
-          filter="email"
-          pageSize={10}
-        />
+        <h1 className="text-primary-foreground text-2xl md:text-3xl lg:text-5xl font-semibold">
+          Hello Company Name
+        </h1>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Verifications;
+export default CompanyDashboard;

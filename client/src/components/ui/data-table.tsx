@@ -23,19 +23,23 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "./button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   title?: string;
+  filter?: string;
+  pageSize: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   title,
+  filter,
+  pageSize,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -51,19 +55,30 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    table.setPageSize(pageSize);
+  }, [table]);
+
   return (
     <div>
-      {/* Filter input */}
+      {/* Header */}
       <div className="flex flex-row justify-between items-center w-full mb-1 sm:mb-0 py-4">
-        {title && <h2 className="text-2xl md:text-4xl text-primary-foreground">{title}</h2>}
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="rounded-lg border-transparent appearance-none border border-gray-300 w-[200px] md:max-w-sm md:flex-1 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
+        {title && (
+          <h2 className="text-2xl md:text-4xl text-primary-foreground">
+            {title}
+          </h2>
+        )}
+        {/* Filter input */}
+        {filter ? (
+          <Input
+            placeholder={`Filter ${filter}...`}
+            value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn(filter)?.setFilterValue(event.target.value)
+            }
+            className="rounded-lg border-transparent appearance-none border border-gray-300 w-[200px] md:max-w-sm md:flex-1 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
+        ) : null}
       </div>
       {/* Table */}
       <div className="rounded-md border shadow-md bg-white">

@@ -9,7 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 
-export const USER_NAV_LINKS = [
+export const COMPANY_NAV_LINKS = [
   {
     name: "dashboard",
     title: "Dashboard",

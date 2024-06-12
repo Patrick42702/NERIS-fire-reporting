@@ -1,16 +1,16 @@
-import {
-  FireExtinguisher,
-  Menu,
-  X
-} from "lucide-react";
+import { FireExtinguisher, Menu, X } from "lucide-react";
 
-import { ADMIN_NAV_LINKS } from "@/utils";
+import { ADMIN_NAV_LINKS, COMPANY_NAV_LINKS } from "@/utils";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import NavItem from "./NavItem";
+import NavItem from "../pages/admin/components/NavItem";
 
-const Header = () => {
+interface HeaderProps {
+  page: "admin" | "company";
+}
+
+const Header = ({ page }: HeaderProps) => {
   const [activeNavItem, setActiveNavItem] = useState("dashboard");
   const [isMenuActive, setIsMenuActive] = useState(false);
   const windowSize = useWindowSize();
@@ -88,17 +88,29 @@ const Header = () => {
           <div className="mt-6 h-0.5 w-full bg-primary" />
           {/* menu items */}
           <div className="mt-6 flex flex-col gap-y-[0.563rem]">
-            {ADMIN_NAV_LINKS.map((item) => (
-              <NavItem
-                key={item.name}
-                title={item.title}
-                name={item.name}
-                link={item.link}
-                Icon={item.icon}
-                activeNavItem={activeNavItem}
-                setActiveNavItem={setActiveNavItem}
-              />
-            ))}
+            {page === "admin"
+              ? ADMIN_NAV_LINKS.map((item) => (
+                  <NavItem
+                    key={item.name}
+                    title={item.title}
+                    name={item.name}
+                    link={item.link}
+                    Icon={item.icon}
+                    activeNavItem={activeNavItem}
+                    setActiveNavItem={setActiveNavItem}
+                  />
+                ))
+              : COMPANY_NAV_LINKS.map((item) => (
+                  <NavItem
+                    key={item.name}
+                    title={item.title}
+                    name={item.name}
+                    link={item.link}
+                    Icon={item.icon}
+                    activeNavItem={activeNavItem}
+                    setActiveNavItem={setActiveNavItem}
+                  />
+                ))}
           </div>
         </div>
       </div>

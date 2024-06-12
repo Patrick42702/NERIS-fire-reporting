@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import { Outlet } from "react-router-dom";
 
-const AdminLayout = () => {
+const CompanyLayout = () => {
   return (
     <div className="flex flex-col h-screen lg:flex-row w-full">
       <Header page="admin" />
@@ -15,4 +15,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default CompanyLayout;

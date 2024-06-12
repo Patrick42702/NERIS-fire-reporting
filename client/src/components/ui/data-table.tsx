@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({
     <div>
       {/* Filter input */}
       <div className="flex flex-row justify-between items-center w-full mb-1 sm:mb-0 py-4">
-        {title && <h2 className="text-2xl">{title}</h2>}
+        {title && <h2 className="text-2xl md:text-4xl text-primary-foreground">{title}</h2>}
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
         />
       </div>
       {/* Table */}
-      <div className="rounded-md border shadow-sm bg-white/70">
+      <div className="rounded-md border shadow-md bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

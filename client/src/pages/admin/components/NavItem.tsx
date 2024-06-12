@@ -23,7 +23,7 @@ const NavItem = ({
       to={link}
       className={`${
         name === activeNavItem
-          ? "font-bold text-primary"
+          ? "font-bold text-primary border-l-2 border-primary bg-gray-50 rounded-sm"
           : "font-semibold text-muted-foreground hover:text-foreground"
       } flex items-center gap-4 p-3 text-lg`}
       onClick={() => setActiveNavItem(name)}

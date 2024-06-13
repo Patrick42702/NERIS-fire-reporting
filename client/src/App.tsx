@@ -13,6 +13,7 @@ import CompanyLayout from "./pages/company/CompanyLayout";
 import CompanyDashboard from "./pages/company/CompanyDashboard";
 import Incidents from "./pages/company/Incidents";
 import Leaderboard from "./pages/company/Leaderboard";
+import Pricing from "./pages/landing/Pricing";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="verifications" element={<Verifications />} />

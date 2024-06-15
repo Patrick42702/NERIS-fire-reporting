@@ -1,4 +1,5 @@
 import {
+  Activity,
   ClipboardPlus,
   FireExtinguisher,
   LayoutDashboardIcon,
@@ -31,6 +32,12 @@ const Header = ({ page, id }: HeaderProps) => {
       title: "Dashboard",
       icon: LayoutDashboardIcon,
       link: `/company/${id}`,
+    },
+    {
+      name: "activity",
+      title: "Activity",
+      icon: Activity,
+      link: `/company/${id}/activity`
     },
     {
       name: "incidents",

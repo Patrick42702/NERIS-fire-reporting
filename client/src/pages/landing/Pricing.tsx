@@ -67,7 +67,7 @@ const Pricing = () => {
             <div
               key={plan}
               className={cn("relative rounded-2xl bg-white shadow-lg", {
-                "border-2 border-primary shadow-green-200":
+                "border-2 border-primary shadow-primary":
                   plan === "Pro" || plan === "Enterprise",
                 "border border-gray-200": plan === "Free",
               })}

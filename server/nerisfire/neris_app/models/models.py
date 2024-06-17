@@ -72,7 +72,7 @@ class Incident(models.Model):
     hours = models.DecimalField(max_digits=100, decimal_places=2)
     
     def __str__(self):
-        return self
+        return str(self.incident_type) + ":" + str(self.activity.activity_id)
     
 class Event(models.Model):
     activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
@@ -84,7 +84,7 @@ class Event(models.Model):
     event_type = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.name
+        return str(self.name) + ":" + str(self.activity.activity_id)
 
 class Class(models.Model):
     activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
@@ -98,7 +98,7 @@ class Class(models.Model):
     hours = models.DecimalField(max_digits=100, decimal_places=2)
     
     def __str__(self):
-        return self.name
+        return str(self.name) + ":" + str(self.activity.activity_id)
     
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

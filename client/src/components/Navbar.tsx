@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <section className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-primary">
+    <section className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-primary shadow-md">
       <header className="container mx-auto px-5 py-4 flex justify-between items-center">
         <Link to="/">
           {/* TODO: replace with logo */}

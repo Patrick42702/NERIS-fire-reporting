@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
-class NerisAppConfig(AppConfig):
+
+class BaseConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'neris_app'
+    name = 'base'

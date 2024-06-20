@@ -95,30 +95,6 @@ const Leaderboard = () => {
       email: "patrick42702@yahoo.com",
       num_of_incidents: 16,
     },
-    {
-      id: 8,
-      user: "6 Muller",
-      email: "patrick42702@yahoo.com",
-      num_of_incidents: 7,
-    },
-    {
-      id: 9,
-      user: "7 Muller",
-      email: "patrick42702@yahoo.com",
-      num_of_incidents: 8,
-    },
-    {
-      id: 10,
-      user: "8 Muller",
-      email: "patrick42702@yahoo.com",
-      num_of_incidents: 3,
-    },
-    {
-      id: 11,
-      user: "9 Muller",
-      email: "patrick42702@yahoo.com",
-      num_of_incidents: 1,
-    },
   ];
 
   const sortedData = data

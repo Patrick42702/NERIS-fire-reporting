@@ -25,11 +25,15 @@ import {
 import { Button } from "./button";
 import { useEffect, useState } from "react";
 import { Input } from "./input";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  title?: string;
+  title?: {
+    text: string;
+    className?: string;
+  };
   filter?: string;
   pageSize: number;
 }
@@ -64,8 +68,13 @@ export function DataTable<TData, TValue>({
       {/* Header */}
       <div className="flex flex-row justify-between items-center w-full mb-1 sm:mb-0 py-4">
         {title && (
-          <h2 className="text-2xl md:text-4xl text-primary-foreground">
-            {title}
+          <h2
+            className={cn(
+              "text-2xl md:text-4xl text-primary-foreground",
+              title?.className,
+            )}
+          >
+            {title.text}
           </h2>
         )}
         {/* Filter input */}

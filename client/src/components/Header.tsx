@@ -45,12 +45,12 @@ const Header = ({ page, id }: HeaderProps) => {
       icon: Siren,
       link: `/company/${id}/incidents`,
     },
-    {
-      name: "leaderboard",
-      title: "Leaderboard",
-      icon: Trophy,
-      link: `/company/${id}/leaderboard`,
-    },
+    // {
+    //   name: "leaderboard",
+    //   title: "Leaderboard",
+    //   icon: Trophy,
+    //   link: `/company/${id}/leaderboard`,
+    // },
   ];
 
   const toggleMenuHandler = () => {

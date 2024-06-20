@@ -56,7 +56,7 @@ const Incidents = () => {
           columns={columns}
           data={data}
           pageSize={10}
-          title="Incident Reports"
+          title={{ text: "Incident Reports" }}
         />
       </div>
     </>

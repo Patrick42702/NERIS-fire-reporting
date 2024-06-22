@@ -67,7 +67,8 @@ class Organization(models.Model):
 #     def __str__(self):
 #         return str(self.name) + ":" + str(self.activity.activity_id)
 #
-# class Member(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     # is_superuser = models.BooleanField(default=false, null=false)
-#
+class Member(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    fire_nickname = models.CharField(max_length=200)
+    # is_superuser = models.BooleanField(default=false, null=false)
+

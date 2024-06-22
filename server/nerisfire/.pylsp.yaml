@@ -1,0 +1,6 @@
+log_level: DEBUG
+log_file: /Users/patrickmuller/repos/NERIS-fire-reporting/server/nerisfire/pylsp.log
+
+plugins:
+  pylsp_mypy:
+    enabled: false

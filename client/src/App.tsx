@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/landing/Landing";
 import SignUp from "./pages/auth/SignUp";
 import SignIn from "./pages/auth/SignIn";
@@ -19,29 +19,27 @@ import Activity from "./pages/company/Activity";
 function App() {
   return (
     <div className="app">
-      <Router>
-        {/* Navbar */}
-        <Routes>
-          {/* page routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="verifications" element={<Verifications />} />
-            <Route path="users" element={<Users />} />
-            <Route path="organizations" element={<Organizations />} />
-          </Route>
-          <Route path="/company/:id" element={<CompanyLayout />}>
-            <Route index element={<CompanyDashboard />} />
-            <Route path="activity" element={<Activity />} />
-            <Route path="incidents" element={<Incidents />} />
-            <Route path="leaderboard" element={<Leaderboard />} />
-          </Route>
-        </Routes>
-        {/* TODO: Footer */}
-      </Router>
+      {/* Navbar */}
+      <Routes>
+        {/* page routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="verifications" element={<Verifications />} />
+          <Route path="users" element={<Users />} />
+          <Route path="organizations" element={<Organizations />} />
+        </Route>
+        <Route path="/company/:id" element={<CompanyLayout />}>
+          <Route index element={<CompanyDashboard />} />
+          <Route path="activity" element={<Activity />} />
+          <Route path="incidents" element={<Incidents />} />
+          <Route path="leaderboard" element={<Leaderboard />} />
+        </Route>
+      </Routes>
+      {/* TODO: Footer */}
     </div>
   );
 }

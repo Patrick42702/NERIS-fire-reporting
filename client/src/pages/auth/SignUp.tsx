@@ -2,24 +2,103 @@ import MainLayout from "@/components/MainLayout";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createOrganization } from "@/services/organization";
+import { createUser } from "@/services/user";
+import { RootState } from "@/store";
+import { userActions } from "@/store/reducers/userReducer";
+import { RegisterUserInputs } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, Check } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterUserInputs>();
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
-
   const steps = ["Account Info", "Organization Info"];
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user);
+
+  const { mutate: registerUser, isPending: isUserPending } = useMutation({
+    mutationFn: (data: Partial<RegisterUserInputs>) => {
+      return createUser({
+        fname: data.fname,
+        lname: data.lname,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+      });
+    },
+    onSuccess: (data) => {
+      dispatch(userActions.setUserInfo(data));
+
+      // Save in local storage
+      localStorage.setItem("account", JSON.stringify(data));
+    },
+    onError: (err) => {
+      console.error(err.message);
+    },
+  });
+
+  const { mutate: registerOrg, isPending: isOrgPending } = useMutation({
+    mutationFn: (data: Partial<RegisterUserInputs>) => {
+      return createOrganization({
+        organization: data.organization,
+        organizationPhone: data.organizationPhone,
+      });
+    },
+    onSuccess: (data) => {
+      dispatch(userActions.setUserInfo(data));
+
+      // Save in local storage
+      localStorage.setItem("account", JSON.stringify(data));
+    },
+    onError: (err) => {
+      console.error(err.message);
+    },
+  });
+
+  useEffect(() => {
+    if (userState.userInfo) {
+      navigate("/");
+    }
+  }, [userState.userInfo]);
+
+  const onSubmit: SubmitHandler<RegisterUserInputs> = async (data) => {
+    const {
+      fname,
+      lname,
+      email,
+      phone,
+      password,
+      organization,
+      organizationPhone,
+    } = data;
+
+    registerUser({ fname, lname, email, phone, password });
+
+    registerOrg({ organization, organizationPhone });
+
+    // TODO: Link user and org
+  };
+
   return (
     <MainLayout>
       <div className="h-80 bg-primary bg-gradient-to-r from-primary to-red-500 w-full" />
-      <div className="container relative pt-14 flex -mt-80 flex-col items-center justifty-between lg:px-0">
+      <div className="container relative pt-14 flex -mt-80 flex-col items-center justify-between lg:px-0">
         <h1 className="text-white mb-10 text-xl md:text-2xl lg:text-3xl font-semibold">
           Welcome to App Name
         </h1>
-        <div className="bg-white relative flex flex-col items-center justifty-between p-4 lg:p-6 rounded-md drop-shadow">
-          {/* Register stepper */}
+        <div className="bg-white relative flex flex-col items-center justify-between p-4 lg:p-6 rounded-md drop-shadow">
           <div className="flex justify-between mb-4">
             {steps?.map((step, i) => (
               <div
@@ -38,14 +117,17 @@ const SignUp = () => {
               </div>
             ))}
           </div>
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
+          >
             <div className="flex flex-col items-center space-y-2 text-center">
               <h1 className="text-2xl font-bold text-primary">
                 Create an account
               </h1>
             </div>
 
-            {/* form */}
+            {/* Form */}
             <div className="grid gap-4">
               {currentStep === 1 && (
                 <>
@@ -57,9 +139,10 @@ const SignUp = () => {
                       <Input
                         id="first-name"
                         placeholder="Max"
-                        required
+                        {...register("fname", { required: true })}
                         className="bg-gray-50 drop-shadow-sm-sm"
                       />
+                      {errors.fname && <span>This field is required</span>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="last-name" className="text-slate-600">
@@ -68,9 +151,10 @@ const SignUp = () => {
                       <Input
                         id="last-name"
                         placeholder="Robinson"
-                        required
+                        {...register("lname", { required: true })}
                         className="bg-gray-50 drop-shadow-sm"
                       />
+                      {errors.lname && <span>This field is required</span>}
                     </div>
                   </div>
                   <div className="grid gap-2">
@@ -81,9 +165,10 @@ const SignUp = () => {
                       id="email"
                       type="email"
                       placeholder="m@example.com"
-                      required
+                      {...register("email", { required: true })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
+                    {errors.email && <span>This field is required</span>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone" className="text-slate-600">
@@ -93,9 +178,10 @@ const SignUp = () => {
                       id="phone"
                       type="tel"
                       placeholder="(xxx) xxx-xxxx"
-                      required
+                      {...register("phone", { required: true })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
+                    {errors.phone && <span>This field is required</span>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password" className="text-slate-600">
@@ -104,8 +190,10 @@ const SignUp = () => {
                     <Input
                       id="password"
                       type="password"
+                      {...register("password", { required: true })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
+                    {errors.password && <span>This field is required</span>}
                   </div>
                   <div className="grid gap-2">
                     <Label
@@ -132,46 +220,55 @@ const SignUp = () => {
                       id="organization"
                       type="text"
                       placeholder="Fire Department"
-                      required
+                      {...register("organization", { required: true })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
+                    {errors.organization && <span>This field is required</span>}
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="phone" className="text-slate-600">
+                    <Label
+                      htmlFor="organizationPhone"
+                      className="text-slate-600"
+                    >
                       Organization Phone
                     </Label>
                     <Input
-                      id="phone"
+                      id="organizationPhone"
                       type="tel"
                       placeholder="(xxx) xxx-xxxx"
-                      required
+                      {...register("organizationPhone", { required: true })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
+                    {errors.organizationPhone && (
+                      <span>This field is required</span>
+                    )}
                   </div>
                 </>
               )}
-              <Button
-                className="w-full"
-                onClick={() => {
-                  currentStep === steps.length
-                    ? setComplete(true)
-                    : setCurrentStep((prev) => prev + 1);
-                }}
-              >
-                {currentStep === steps.length ? "Create an account" : "Next"}
-              </Button>
             </div>
-            <Link
-              to="/sign-in"
-              className={buttonVariants({
-                variant: "link",
-                className: "gap-1.5",
-              })}
+
+            <Button
+              type={currentStep === steps.length ? "submit" : "button"}
+              className="w-full"
+              onClick={() => {
+                currentStep === steps.length
+                  ? setComplete(true)
+                  : setCurrentStep((prev) => prev + 1);
+              }}
             >
-              Already have an account? Sign In
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+              {currentStep === steps.length ? "Create an account" : "Next"}
+            </Button>
+          </form>
+          <Link
+            to="/sign-in"
+            className={buttonVariants({
+              variant: "link",
+              className: "gap-1.5",
+            })}
+          >
+            Already have an account? Sign In
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </MainLayout>

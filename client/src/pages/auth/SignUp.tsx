@@ -19,7 +19,21 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterUserInputs>();
+    watch,
+    trigger,
+    clearErrors,
+  } = useForm<RegisterUserInputs>({
+    defaultValues: {
+      fname: "",
+      lname: "",
+      email: "",
+      phone: undefined,
+      password: "",
+      confirmPassword: "",
+      organization: "",
+      organizationPhone: undefined,
+    },
+  });
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
   const steps = ["Account Info", "Organization Info"];
@@ -73,6 +87,10 @@ const SignUp = () => {
     }
   }, [userState.userInfo]);
 
+  useEffect(() => {
+    clearErrors()
+  }, [currentStep])
+
   const onSubmit: SubmitHandler<RegisterUserInputs> = async (data) => {
     const {
       fname,
@@ -91,6 +109,31 @@ const SignUp = () => {
     // TODO: Link user and org
   };
 
+  const password = watch("password");
+
+  const handleNextStep = async () => {
+    if (currentStep === 1) {
+      const isValid = await trigger([
+        "fname",
+        "lname",
+        "email",
+        "phone",
+        "password",
+        "confirmPassword",
+      ]);
+      if (isValid) {
+        setCurrentStep((prev) => prev + 1);
+        clearErrors(); // Clear all errors
+      }
+    } else if (currentStep === 2) {
+      // Add validation for the second step if necessary
+      const isValid = await trigger(["organization", "organizationPhone"]);
+      if (isValid) {
+        setComplete(true);
+      }
+    }
+  };
+
   return (
     <MainLayout>
       <div className="h-80 bg-primary bg-gradient-to-r from-primary to-red-500 w-full" />
@@ -103,12 +146,9 @@ const SignUp = () => {
             {steps?.map((step, i) => (
               <div
                 key={i}
-                className={`step-item cursor-pointer ${
+                className={`step-item ${
                   currentStep === i + 1 && "step-active"
                 } ${(i + 1 < currentStep || complete) && "step-complete"}`}
-                onClick={() => {
-                  setCurrentStep(i + 1);
-                }}
               >
                 <div className="step">
                   {i + 1 < currentStep || complete ? <Check /> : i + 1}
@@ -139,10 +179,24 @@ const SignUp = () => {
                       <Input
                         id="first-name"
                         placeholder="Max"
-                        {...register("fname", { required: true })}
+                        {...register("fname", {
+                          minLength: {
+                            value: 1,
+                            message:
+                              "First Name length must be at least 1 character",
+                          },
+                          required: {
+                            value: true,
+                            message: "First Name is required.",
+                          },
+                        })}
                         className="bg-gray-50 drop-shadow-sm-sm"
                       />
-                      {errors.fname && <span>This field is required</span>}
+                      {errors.fname?.message && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.fname?.message}
+                        </p>
+                      )}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="last-name" className="text-slate-600">
@@ -151,10 +205,24 @@ const SignUp = () => {
                       <Input
                         id="last-name"
                         placeholder="Robinson"
-                        {...register("lname", { required: true })}
+                        {...register("lname", {
+                          minLength: {
+                            value: 1,
+                            message:
+                              "First Name length must be at least 1 character",
+                          },
+                          required: {
+                            value: true,
+                            message: "First Name is required.",
+                          },
+                        })}
                         className="bg-gray-50 drop-shadow-sm"
                       />
-                      {errors.lname && <span>This field is required</span>}
+                      {errors.lname?.message && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.lname?.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="grid gap-2">
@@ -165,10 +233,24 @@ const SignUp = () => {
                       id="email"
                       type="email"
                       placeholder="m@example.com"
-                      {...register("email", { required: true })}
+                      {...register("email", {
+                        required: {
+                          value: true,
+                          message: "Email is required.",
+                        },
+                        pattern: {
+                          value:
+                            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                          message: "Please enter a valid email",
+                        },
+                      })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
-                    {errors.email && <span>This field is required</span>}
+                    {errors.email?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone" className="text-slate-600">
@@ -178,10 +260,23 @@ const SignUp = () => {
                       id="phone"
                       type="tel"
                       placeholder="(xxx) xxx-xxxx"
-                      {...register("phone", { required: true })}
+                      {...register("phone", {
+                        required: {
+                          value: true,
+                          message: "Phone number is required.",
+                        },
+                        pattern: {
+                          value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
+                          message: "Please enter a valid phone number.",
+                        },
+                      })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
-                    {errors.phone && <span>This field is required</span>}
+                    {errors.phone?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.phone?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password" className="text-slate-600">
@@ -190,10 +285,24 @@ const SignUp = () => {
                     <Input
                       id="password"
                       type="password"
-                      {...register("password", { required: true })}
+                      {...register("password", {
+                        required: {
+                          value: true,
+                          message: "Password is required.",
+                        },
+                        minLength: {
+                          value: 6,
+                          message:
+                            "Password length must be at least 6 characters.",
+                        },
+                      })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
-                    {errors.password && <span>This field is required</span>}
+                    {errors.password?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.password?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label
@@ -206,7 +315,23 @@ const SignUp = () => {
                       id="confirm-password"
                       type="password"
                       className="bg-gray-50 drop-shadow-sm"
+                      {...register("confirmPassword", {
+                        required: {
+                          value: true,
+                          message: "Confirm password is required.",
+                        },
+                        validate: (value) => {
+                          if (value !== password) {
+                            return "Password do not match.";
+                          }
+                        },
+                      })}
                     />
+                    {errors.confirmPassword?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.confirmPassword?.message}
+                      </p>
+                    )}
                   </div>
                 </>
               )}
@@ -220,10 +345,24 @@ const SignUp = () => {
                       id="organization"
                       type="text"
                       placeholder="Fire Department"
-                      {...register("organization", { required: true })}
+                      {...register("organization", {
+                        minLength: {
+                          value: 1,
+                          message:
+                            "Organization name length must be at least 1 character",
+                        },
+                        required: {
+                          value: true,
+                          message: "Organization name is required.",
+                        },
+                      })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
-                    {errors.organization && <span>This field is required</span>}
+                    {errors.organization?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.organization?.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label
@@ -236,11 +375,22 @@ const SignUp = () => {
                       id="organizationPhone"
                       type="tel"
                       placeholder="(xxx) xxx-xxxx"
-                      {...register("organizationPhone", { required: true })}
+                      {...register("organizationPhone", {
+                        required: {
+                          value: true,
+                          message: "Organization Phone number is required.",
+                        },
+                        pattern: {
+                          value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
+                          message: "Please enter a valid phone number.",
+                        },
+                      })}
                       className="bg-gray-50 drop-shadow-sm"
                     />
-                    {errors.organizationPhone && (
-                      <span>This field is required</span>
+                    {errors.organizationPhone?.message && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.organizationPhone?.message}
+                      </p>
                     )}
                   </div>
                 </>
@@ -250,11 +400,7 @@ const SignUp = () => {
             <Button
               type={currentStep === steps.length ? "submit" : "button"}
               className="w-full"
-              onClick={() => {
-                currentStep === steps.length
-                  ? setComplete(true)
-                  : setCurrentStep((prev) => prev + 1);
-              }}
+              onClick={handleNextStep}
             >
               {currentStep === steps.length ? "Create an account" : "Next"}
             </Button>

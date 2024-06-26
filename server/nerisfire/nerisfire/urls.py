@@ -1,6 +1,5 @@
 from django.urls import include, path
 from rest_framework import routers
-from auth import urls
 
 router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
@@ -9,8 +8,7 @@ router = routers.DefaultRouter()
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include('auth.urls')),
-    # path('', include(router.urls)),
-    path('api/', include('api.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('auth/', include("authenticate.urls")),
+    path('api/', include("api.urls"))
 ]

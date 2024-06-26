@@ -1,11 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 import uuid
-
-#this is a test example
-class Item(models.Model):
-    name = models.CharField(max_length=200)
-    created = models.DateTimeField(auto_now_add=True)
 
 class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -16,7 +11,7 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.dept_name
-
+#
 # class Activity(models.Model):
 #     activity_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 #     activity_type = models.CharField(max_length=255, null=False)
@@ -67,8 +62,7 @@ class Organization(models.Model):
 #     def __str__(self):
 #         return str(self.name) + ":" + str(self.activity.activity_id)
 #
-class Member(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    fire_nickname = models.CharField(max_length=200)
+class Member(AbstractUser):
+    organization = models.ForeignKey('organization', on_delete=models.CASCADE, null=True, blank=True)
     # is_superuser = models.BooleanField(default=false, null=false)
 

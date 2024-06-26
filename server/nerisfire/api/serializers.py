@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import Group, User
-from base.models import Item
+from base import models
 
 
 # class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -38,12 +38,27 @@ from base.models import Item
 #         return instance
 #
 
-class ItemSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['email', 'username']
+#
+class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
-        fields = '__all__'
+        model = models.Organization
+        fields = ['location', 'dept_name', 'verified']
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['email', 'username']
+# class IncidentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Incident
+#         fields = ['activity ','account ,','station','shift','incident_type', 'number', 'hours']
+
+
+
+
+
+
+
+
+
+

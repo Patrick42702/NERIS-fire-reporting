@@ -1,10 +1,10 @@
 from django.contrib.auth.models import Group, User
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import api_view
-from base.models import Item
-from .serializers import ItemSerializer, UserSerializer
+from base import models
+from .serializers import OrganizationSerializer
 
 # class MemberViewSet(viewsets.ModelViewSet):
 #     queryset = Member.objects.all().order_by('last_name')
@@ -33,32 +33,14 @@ from .serializers import ItemSerializer, UserSerializer
 #
 #         return Response({'message': f'{removed_count} records removed'}, status=200)
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = User.objects.all().order_by('-date_joined')
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all().order_by('name')
-#     serializer_class = GroupSerializer
-#
+
+# views for getting statistics for member calls
 
 @api_view(['GET'])
-def getData(request):
-    items = Item.objects.all()
-    serializer = ItemSerializer(items, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def getUsers(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
+@permission_classes([permissions.IsAuthenticated])
+def getOrganizations(request):
+    orgs = models.Organization.objects.all()
+    serializer = OrganizationSerializer(orgs, many=True)
     return Response(serializer.data)
 
 

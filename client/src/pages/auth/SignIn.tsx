@@ -3,9 +3,59 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginUserInputs } from "@/types";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/services/user";
+import { userActions } from "@/store/reducers/userReducer";
+import { useEffect } from "react";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: ({ email, password }: LoginUserInputs) => {
+      return login({ email, password });
+    },
+    onSuccess: (data) => {
+      dispatch(userActions.setUserInfo(data));
+
+      // Save in local storage
+      localStorage.setItem("account", JSON.stringify(data));
+    },
+    onError: (err) => {
+      console.error(err.message);
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginUserInputs>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  useEffect(() => {
+    if (userState.userInfo) {
+      navigate("/");
+    }
+  }, [userState.userInfo]);
+
+  const onSubmit: SubmitHandler<LoginUserInputs> = async (data) => {
+    const { email, password } = data;
+
+    mutate({ email, password });
+  };
+
   return (
     <MainLayout>
       <div className="h-80 bg-primary bg-gradient-to-r from-primary to-red-500 w-full" />
@@ -20,7 +70,7 @@ const SignIn = () => {
             </div>
 
             {/* form */}
-            <div className="grid gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email" className="text-slate-600">
                   Email
@@ -29,17 +79,52 @@ const SignIn = () => {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
+                  {...register("email", {
+                    required: {
+                      value: true,
+                      message: "Email is required.",
+                    },
+                    pattern: {
+                      value:
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                      message: "Please enter a valid email",
+                    },
+                  })}
+                  className="bg-gray-50 drop-shadow-sm"
                 />
+                {errors.email?.message && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.email?.message}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password" className="text-slate-600">
                   Password
                 </Label>
-                <Input id="password" type="password" />
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password", {
+                    required: {
+                      value: true,
+                      message: "Password is required.",
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "Password length must be at least 6 characters.",
+                    },
+                  })}
+                  className="bg-gray-50 drop-shadow-sm"
+                />
+                {errors.password?.message && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.password?.message}
+                  </p>
+                )}
               </div>
               <Button className="w-full">Sign in</Button>
-            </div>
+            </form>
             <Link
               to="/sign-up"
               className={buttonVariants({

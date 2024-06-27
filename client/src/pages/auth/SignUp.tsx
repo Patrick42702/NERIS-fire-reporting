@@ -101,10 +101,11 @@ const SignUp = () => {
       organization,
       organizationPhone,
     } = data;
+    
+    registerOrg({ organization, organizationPhone });
 
     registerUser({ fname, lname, email, phone, password });
 
-    registerOrg({ organization, organizationPhone });
 
     // TODO: Link user and org
   };

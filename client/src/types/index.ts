@@ -8,3 +8,8 @@ export interface RegisterUserInputs {
   organization: string;
   organizationPhone: number;
 }
+
+export interface LoginUserInputs {
+  email: string
+  password: string
+}

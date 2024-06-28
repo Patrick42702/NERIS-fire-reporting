@@ -15,6 +15,8 @@ import Incidents from "./pages/company/Incidents";
 import Leaderboard from "./pages/company/Leaderboard";
 import Pricing from "./pages/landing/Pricing";
 import Activity from "./pages/company/Activity";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -32,12 +34,15 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="organizations" element={<Organizations />} />
         </Route>
-        <Route path="/company/:id" element={<CompanyLayout />}>
-          <Route index element={<CompanyDashboard />} />
-          <Route path="activity" element={<Activity />} />
-          <Route path="incidents" element={<Incidents />} />
-          <Route path="leaderboard" element={<Leaderboard />} />
-        </Route>
+        <ProtectedRoute>
+          <Route path="/company/:id" element={<CompanyLayout />}>
+            <Route index element={<CompanyDashboard />} />
+            <Route path="activity" element={<Activity />} />
+            <Route path="incidents" element={<Incidents />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
+          </Route>
+        </ProtectedRoute>
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {/* TODO: Footer */}
     </div>

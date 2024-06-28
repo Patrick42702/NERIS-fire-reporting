@@ -53,10 +53,11 @@ const SignUp = () => {
       });
     },
     onSuccess: (data) => {
-      dispatch(userActions.setUserInfo(data));
-
-      // Save in local storage
-      localStorage.setItem("account", JSON.stringify(data));
+      // dispatch(userActions.setUserInfo(data));
+      // // Save in local storage
+      // // localStorage.setItem("account", JSON.stringify(data));
+      // alert("Account registered, hang on tight while we verify your account.");
+      // navigate("/");
     },
     onError: (err) => {
       console.error(err.message);
@@ -70,12 +71,7 @@ const SignUp = () => {
         organizationPhone: data.organizationPhone,
       });
     },
-    onSuccess: (data) => {
-      dispatch(userActions.setUserInfo(data));
-
-      // Save in local storage
-      localStorage.setItem("account", JSON.stringify(data));
-    },
+    onSuccess: (data) => {},
     onError: (err) => {
       console.error(err.message);
     },
@@ -88,8 +84,8 @@ const SignUp = () => {
   }, [userState.userInfo]);
 
   useEffect(() => {
-    clearErrors()
-  }, [currentStep])
+    clearErrors();
+  }, [currentStep]);
 
   const onSubmit: SubmitHandler<RegisterUserInputs> = async (data) => {
     const {
@@ -101,12 +97,13 @@ const SignUp = () => {
       organization,
       organizationPhone,
     } = data;
-    
+
     registerOrg({ organization, organizationPhone });
 
     registerUser({ fname, lname, email, phone, password });
 
-
+    navigate("/");
+    alert("Account registered, hang on tight while we verify your account.");
     // TODO: Link user and org
   };
 

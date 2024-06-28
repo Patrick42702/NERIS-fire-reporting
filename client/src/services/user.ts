@@ -1,4 +1,6 @@
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
 import { LoginUserInputs, RegisterUserInputs } from "@/types";
+import axios from "axios";
 
 export const createUser = async ({
   fname,
@@ -35,21 +37,14 @@ export const createUser = async ({
 
 export const login = async ({ email, password }: LoginUserInputs) => {
   try {
-    const response = await fetch("/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    const response = await axios.post("/api/token", { email, password });
 
-    if (!response.ok)
-      throw new Error(`Failed to login user: ${response.statusText}`);
+    // store access_token and refresh_token in localStorage
+    localStorage.clear();
+    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
 
-    return response.json();
+    return response;
   } catch (error: any) {
     if (error.response && error.response.data.message) {
       throw new Error(error.response.data.message);

@@ -11,23 +11,19 @@ export const createUser = async ({
   password,
 }: Partial<RegisterUserInputs>) => {
   try {
-    const response = await fetch("/api/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fname,
-        lname,
-        email,
-        phone,
-        password,
-      }),
+    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/users/register", {
+      fname,
+      lname,
+      email,
+      phone,
+      password,
     });
-    if (!response.ok) {
+
+    if (response.status !== 200) {
       throw new Error(`Failed to create user: ${response.statusText}`);
     }
-    return response.json();
+
+    return response.data;
   } catch (error: any) {
     if (error.response && error.response.data.message) {
       throw new Error(error.response.data.message);
@@ -38,7 +34,7 @@ export const createUser = async ({
 
 export const login = async ({ email, password }: LoginUserInputs) => {
   try {
-    const response = await axios.post("/api/token", { email, password });
+    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/token", { email, password });
 
     // Decode the access token
     const decodedToken = decodeToken(response.data.access);

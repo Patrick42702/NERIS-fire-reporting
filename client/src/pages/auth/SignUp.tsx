@@ -53,6 +53,7 @@ const SignUp = () => {
       });
     },
     onSuccess: (data) => {
+      console.log(data)
       // dispatch(userActions.setUserInfo(data));
       // // Save in local storage
       // // localStorage.setItem("account", JSON.stringify(data));
@@ -98,7 +99,7 @@ const SignUp = () => {
       organizationPhone,
     } = data;
 
-    registerOrg({ organization, organizationPhone });
+    // registerOrg({ organization, organizationPhone });
 
     registerUser({ fname, lname, email, phone, password });
 

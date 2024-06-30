@@ -1,0 +1,7 @@
+log_level: DEBUG
+log_file: /path/to/your/project/pylsp.log  # Make sure to update this path accordingly
+
+plugins:
+  pylsp_mypy:
+    enabled: false
+

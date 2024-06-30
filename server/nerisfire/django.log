@@ -2868,3 +2868,7 @@ WARNING 2024-06-30 13:50:38,300 log Method Not Allowed: /api/token/refresh
 WARNING 2024-06-30 13:50:44,537 log Method Not Allowed: /api/token
 WARNING 2024-06-30 13:51:18,759 log Method Not Allowed: /api/token/refresh
 WARNING 2024-06-30 13:51:33,061 log Unauthorized: /api/token/refresh
+WARNING 2024-06-30 13:57:34,163 log Not Found: /api/member
+WARNING 2024-06-30 13:57:36,848 log Not Found: /api/member/
+WARNING 2024-06-30 14:09:48,949 log Method Not Allowed: /api/member/register
+WARNING 2024-06-30 14:09:49,092 log Not Found: /favicon.ico

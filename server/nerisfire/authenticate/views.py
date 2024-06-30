@@ -3,6 +3,7 @@ from base.models import Member
 from rest_framework import generics
 from .seralizers import MemberSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+
 import logging
 
 logger = logging.getLogger('authenticate')  # Use the same logger name as defined in settings
@@ -44,4 +45,4 @@ class CreateMemberView(generics.CreateAPIView):
 #         logout(request)
 #         return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
 #
-
+#

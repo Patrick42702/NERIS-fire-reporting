@@ -9,8 +9,6 @@ class MemberSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         member = Member.objects.create_user(
-            first_name = validated_data.get('fname'),
-            last_name = validated_data.get('lname'),
             **validated_data
         )
         return member

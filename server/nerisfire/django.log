@@ -3129,3 +3129,52 @@ DETAIL:  Failing row contains (3, pbkdf2_sha256$720000$uytfzCwJ6Zyt3aVE1acG28$0d
 
 WARNING 2024-06-30 15:03:25,792 log Forbidden: /api/orgs/
 WARNING 2024-06-30 15:09:45,976 log Unauthorized: /api/orgs/
+WARNING 2024-06-30 18:43:39,491 log Not Found: /api/tokenm
+WARNING 2024-06-30 18:43:41,736 log Method Not Allowed: /api/token
+WARNING 2024-06-30 18:46:22,866 log Method Not Allowed: /api/token
+WARNING 2024-06-30 18:47:18,216 log Not Found: /api/token/
+WARNING 2024-06-30 18:50:47,925 log Not Found: /api/token/
+WARNING 2024-06-30 18:51:00,422 log Not Found: /api/token/
+WARNING 2024-06-30 18:51:03,859 log Not Found: /api/token/
+WARNING 2024-06-30 18:51:05,892 log Method Not Allowed: /api/token
+WARNING 2024-06-30 18:51:11,940 log Method Not Allowed: /api/token
+WARNING 2024-06-30 18:56:19,365 log Not Found: /member/register
+ERROR 2024-06-30 18:56:26,757 log Internal Server Error: /api/member/register
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py", line 19, in create
+    self.perform_create(serializer)
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py", line 24, in perform_create
+    serializer.save()
+  File "/usr/local/lib/python3.12/site-packages/rest_framework/serializers.py", line 208, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/nerisfire/authenticate/seralizers.py", line 11, in create
+    member = Member.objects.create_user(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: base.models.models.MemberManager.create_user() got multiple values for keyword argument 'first_name'
+WARNING 2024-06-30 18:57:26,757 log Method Not Allowed: /api/member/register

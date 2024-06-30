@@ -177,3 +177,5 @@ Traceback (most recent call last):
 django.db.utils.IntegrityError: null value in column "first_name" of relation "base_member" violates not-null constraint
 DETAIL:  Failing row contains (5, pbkdf2_sha256$720000$iFZD88hLUnUz0KtNifrJQY$/m6pEpre/DFjtlZXBvLy..., null, jvariara@gmail.com, null, null, 8455319573, t, f, f, 2024-06-30 18:37:26.024344+00, null).
 
+WARNING 2024-06-30 15:03:25,792 log Forbidden: /api/orgs/
+WARNING 2024-06-30 15:09:45,976 log Unauthorized: /api/orgs/

@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "./reducers/userReducer";
 
-// Fetch user info from local storage
-const userInfoFromStorage = localStorage.getItem("account");
-const parsedUserInfo = userInfoFromStorage
-  ? JSON.parse(userInfoFromStorage)
-  : null;
+// Fetch user info from local storage and decode token
+const userInfoFromStorage = localStorage.getItem("user");
+const parsedUserInfo = userInfoFromStorage ? JSON.parse(userInfoFromStorage) : null;
 
 // Define the initial state for the store
 const initialState = {

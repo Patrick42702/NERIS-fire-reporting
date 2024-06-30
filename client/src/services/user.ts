@@ -1,4 +1,5 @@
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
+import { decodeToken } from "@/lib/utils";
 import { LoginUserInputs, RegisterUserInputs } from "@/types";
 import axios from "axios";
 
@@ -39,16 +40,30 @@ export const login = async ({ email, password }: LoginUserInputs) => {
   try {
     const response = await axios.post("/api/token", { email, password });
 
-    // store access_token and refresh_token in localStorage
+    // Decode the access token
+    const decodedToken = decodeToken(response.data.access);
+
+    // Store access_token, refresh_token, and user info in localStorage
     localStorage.clear();
     localStorage.setItem(ACCESS_TOKEN, response.data.access);
     localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+    localStorage.setItem("user", JSON.stringify(decodedToken));
 
-    return response;
+    return {
+      access: response.data.access,
+      refresh: response.data.refresh,
+      ...decodedToken,
+    };
   } catch (error: any) {
     if (error.response && error.response.data.message) {
       throw new Error(error.response.data.message);
     }
     throw new Error(error.message);
   }
+};
+
+export const logout = () => {
+  localStorage.removeItem(ACCESS_TOKEN);
+  localStorage.removeItem(REFRESH_TOKEN);
+  localStorage.removeItem("user");
 };

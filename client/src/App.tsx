@@ -1,22 +1,22 @@
 import { Route, Routes } from "react-router-dom";
-import Landing from "./pages/landing/Landing";
-import SignUp from "./pages/auth/SignUp";
 import SignIn from "./pages/auth/SignIn";
+import SignUp from "./pages/auth/SignUp";
+import Landing from "./pages/landing/Landing";
 
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
-import Verifications from "./pages/admin/Verifications";
-import Users from "./pages/admin/Users";
 import Organizations from "./pages/admin/Organizations";
+import Users from "./pages/admin/Users";
+import Verifications from "./pages/admin/Verifications";
 
-import CompanyLayout from "./pages/company/CompanyLayout";
+import NotFound from "./components/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Activity from "./pages/company/Activity";
 import CompanyDashboard from "./pages/company/CompanyDashboard";
+import CompanyLayout from "./pages/company/CompanyLayout";
 import Incidents from "./pages/company/Incidents";
 import Leaderboard from "./pages/company/Leaderboard";
 import Pricing from "./pages/landing/Pricing";
-import Activity from "./pages/company/Activity";
-import ProtectedRoute from "./components/ProtectedRoute";
-import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -34,14 +34,47 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="organizations" element={<Organizations />} />
         </Route>
-        <ProtectedRoute>
-          <Route path="/company/:id" element={<CompanyLayout />}>
-            <Route index element={<CompanyDashboard />} />
-            <Route path="activity" element={<Activity />} />
-            <Route path="incidents" element={<Incidents />} />
-            <Route path="leaderboard" element={<Leaderboard />} />
-          </Route>
-        </ProtectedRoute>
+        <Route
+          path="/company/:id"
+          element={
+            <ProtectedRoute>
+              <CompanyLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <CompanyDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="activity"
+            element={
+              <ProtectedRoute>
+                <Activity />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="incidents"
+            element={
+              <ProtectedRoute>
+                <Incidents />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="leaderboard"
+            element={
+              <ProtectedRoute>
+                <Leaderboard />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       {/* TODO: Footer */}

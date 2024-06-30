@@ -2857,3 +2857,14 @@ WARNING 2024-06-27 20:08:37,596 log Not Found: /auth/admin/base/member/
 WARNING 2024-06-27 20:10:23,641 log Method Not Allowed: /api/login/
 WARNING 2024-06-27 20:10:35,436 log Method Not Allowed: /api/logout/
 WARNING 2024-06-27 20:10:39,423 log Method Not Allowed: /api/register/
+WARNING 2024-06-30 13:47:23,059 log Not Found: /
+WARNING 2024-06-30 13:47:23,141 log Not Found: /favicon.ico
+WARNING 2024-06-30 13:47:27,891 log Not Found: /api-auth/
+WARNING 2024-06-30 13:47:36,590 log Not Found: /api/login
+WARNING 2024-06-30 13:47:55,461 log Method Not Allowed: /api/token
+WARNING 2024-06-30 13:48:17,456 log Not Found: /
+WARNING 2024-06-30 13:48:24,702 log Not Found: /auth/admin/
+WARNING 2024-06-30 13:50:38,300 log Method Not Allowed: /api/token/refresh
+WARNING 2024-06-30 13:50:44,537 log Method Not Allowed: /api/token
+WARNING 2024-06-30 13:51:18,759 log Method Not Allowed: /api/token/refresh
+WARNING 2024-06-30 13:51:33,061 log Unauthorized: /api/token/refresh

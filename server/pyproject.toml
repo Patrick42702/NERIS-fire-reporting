@@ -1,0 +1,9 @@
+[tool.pylsp-mypy]
+enabled = false
+live_mode = true
+strict = true
+exclude = ["tests/*"]
+
+[mypy]
+ignore_missing_imports=false
+disallow_untyped_defs =false

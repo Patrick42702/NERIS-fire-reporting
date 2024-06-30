@@ -6,16 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUserInputs } from "@/types";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/user";
 import { userActions } from "@/store/reducers/userReducer";
 import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 
 const SignIn = () => {
-  const dispatch = useDispatch();
-  const userState = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
@@ -26,7 +26,7 @@ const SignIn = () => {
       dispatch(userActions.setUserInfo(data));
 
       // Save in local storage
-      localStorage.setItem("account", JSON.stringify(data));
+      // localStorage.setItem("account", JSON.stringify(data));
     },
     onError: (err) => {
       console.error(err.message);

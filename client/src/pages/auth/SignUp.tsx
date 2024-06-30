@@ -2,6 +2,7 @@ import MainLayout from "@/components/MainLayout";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { createOrganization } from "@/services/organization";
 import { createUser } from "@/services/user";
 import { RootState } from "@/store";
@@ -11,7 +12,6 @@ import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
@@ -39,8 +39,8 @@ const SignUp = () => {
   const steps = ["Account Info", "Organization Info"];
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userState = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector((state: RootState) => state.user);
 
   const { mutate: registerUser, isPending: isUserPending } = useMutation({
     mutationFn: (data: Partial<RegisterUserInputs>) => {
@@ -54,11 +54,6 @@ const SignUp = () => {
     },
     onSuccess: (data) => {
       console.log(data)
-      // dispatch(userActions.setUserInfo(data));
-      // // Save in local storage
-      // // localStorage.setItem("account", JSON.stringify(data));
-      // alert("Account registered, hang on tight while we verify your account.");
-      // navigate("/");
     },
     onError: (err) => {
       console.error(err.message);

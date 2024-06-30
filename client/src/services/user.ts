@@ -11,15 +11,15 @@ export const createUser = async ({
   password,
 }: Partial<RegisterUserInputs>) => {
   try {
-    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/users/register", {
-      fname,
-      lname,
+    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/member/register", {
+      first_name: fname,
+      last_name: lname,
       email,
       phone,
       password,
     });
 
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw new Error(`Failed to create user: ${response.statusText}`);
     }
 
@@ -56,10 +56,4 @@ export const login = async ({ email, password }: LoginUserInputs) => {
     }
     throw new Error(error.message);
   }
-};
-
-export const logout = () => {
-  localStorage.removeItem(ACCESS_TOKEN);
-  localStorage.removeItem(REFRESH_TOKEN);
-  localStorage.removeItem("user");
 };

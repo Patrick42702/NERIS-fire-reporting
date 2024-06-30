@@ -2,13 +2,34 @@ import { ArrowRight, FireExtinguisher, Lock, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "./ui/button";
+import { RootState } from "@/store";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import placeholderUser from "../assets/placeholder_user.jpg";
+import { logout } from "@/store/actions/user";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 
 const Navbar = () => {
+  const { userInfo } = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
   const [isMenuActive, setIsMenuActive] = useState(false);
   const navigate = useNavigate();
 
+  console.log(userInfo);
+
   const toggleMenuHandler = () => {
     setIsMenuActive((prevState) => !prevState);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsMenuActive(false);
   };
 
   return (
@@ -63,62 +84,118 @@ const Navbar = () => {
             />
           </div>
 
+          {/* Mobile Nav divider */}
           <div className="mt-6 h-0.5 w-full bg-primary" />
+
           {/* menu items */}
           <div className="mt-6 flex flex-col gap-y-5">
-            <Link
-              to="/"
-              className="font-medium text-lg md:text-xl text-foreground"
-            >
-              Home
-            </Link>
-            <Link
-              to="/pricing"
-              className="font-medium text-lg md:text-xl text-foreground"
-            >
-              Pricing
-            </Link>
-            <Link
-              className={buttonVariants({ variant: "secondary" })}
-              to="/sign-in"
-            >
-              Sign in <Lock className="ml-1.5 h-5 w-5" />
-            </Link>
-            <Link className={buttonVariants()} to="/sign-up">
-              Get started <ArrowRight className="ml-1.5 h-5 w-5" />
-            </Link>
+            {userInfo ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="font-medium text-lg md:text-xl text-foreground"
+                >
+                  Dashboard
+                </Link>
+                <Button variant="secondary" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/"
+                  className="font-medium text-lg md:text-xl text-foreground"
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="font-medium text-lg md:text-xl text-foreground"
+                >
+                  Pricing
+                </Link>
+                <Link
+                  className={buttonVariants({ variant: "secondary" })}
+                  to="/sign-in"
+                >
+                  Sign in <Lock className="ml-1.5 h-5 w-5" />
+                </Link>
+                <Link className={buttonVariants()} to="/sign-up">
+                  Get started <ArrowRight className="ml-1.5 h-5 w-5" />
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
-        <div className="hidden lg:flex gap-x-6 items-center">
-          <Link
-            to="/"
-            className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
-          >
-            Home
-          </Link>
-          <Link
-            to="/pricing"
-            className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
-          >
-            Pricing
-          </Link>
-        </div>
+        {userInfo ? (
+          <>
+            <div className="hidden lg:flex gap-x-4 items-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    <img
+                      src={placeholderUser}
+                      width={36}
+                      height={36}
+                      alt="Avatar"
+                      className="overflow-hidden rounded-full"
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Desktop */}
+            <div className="hidden lg:flex gap-x-6 items-center">
+              <Link
+                to="/"
+                className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
+              >
+                Home
+              </Link>
+              <Link
+                to="/pricing"
+                className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
+              >
+                Pricing
+              </Link>
+            </div>
 
-        <div className="hidden lg:flex gap-x-4 items-center">
-          <Link
-            to="/sign-in"
-            className="hidden lg:block mt-0 px-4 py-1 sm:px-6 sm:py-2 text-foreground font-semibold transition-all duration-300 hover:text-primary"
-          >
-            Sign in
-          </Link>
-          <Link
-            to="/sign-up"
-            className="hidden lg:flex lg:items-center mt-0 border-2 border-primary px-4 py-1 sm:px-6 sm:py-2 rounded-full text-primary font-semibold transition-all duration-300 hover:bg-primary hover:text-white"
-          >
-            Get started <ArrowRight className="ml-1.5 h-5 w-5" />
-          </Link>
-        </div>
+            {/* Desktop */}
+            <div className="hidden lg:flex gap-x-4 items-center">
+              <Link
+                to="/sign-in"
+                className="hidden lg:block mt-0 px-4 py-1 sm:px-6 sm:py-2 text-foreground font-semibold transition-all duration-300 hover:text-primary"
+              >
+                Sign in
+              </Link>
+              <Link
+                to="/sign-up"
+                className="hidden lg:flex lg:items-center mt-0 border-2 border-primary px-4 py-1 sm:px-6 sm:py-2 rounded-full text-primary font-semibold transition-all duration-300 hover:bg-primary hover:text-white"
+              >
+                Get started <ArrowRight className="ml-1.5 h-5 w-5" />
+              </Link>
+            </div>
+          </>
+        )}
       </header>
     </section>
   );

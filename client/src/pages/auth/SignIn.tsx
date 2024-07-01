@@ -1,6 +1,6 @@
 import MainLayout from "@/components/MainLayout";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
@@ -123,7 +123,12 @@ const SignIn = () => {
                   </p>
                 )}
               </div>
-              <Button className="w-full">Sign in</Button>
+              <Button className="w-full" disabled={isPending ? true : false}>
+                Sign in{" "}
+                {isPending && (
+                  <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
+                )}
+              </Button>
             </form>
             <Link
               to="/sign-up"

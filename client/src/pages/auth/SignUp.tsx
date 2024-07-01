@@ -8,7 +8,7 @@ import { RootState } from "@/store";
 import { userActions } from "@/store/reducers/userReducer";
 import { RegisterUserInputs } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -268,8 +268,8 @@ const SignUp = () => {
               </>
             </div>
 
-            <Button type="submit" className="w-full">
-              Create an account
+            <Button type="submit" className="w-full" disabled={isUserPending ? true : false}>
+              Create an account {isUserPending && <Loader2 className="animate-spin ml-1.5 w-5 h-5" />}
             </Button>
           </form>
           <Link

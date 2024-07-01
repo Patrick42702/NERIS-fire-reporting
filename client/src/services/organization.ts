@@ -11,10 +11,10 @@ export const createOrganization = async ({
   phone,
   userId,
 }: CreateOrganizationProps) => {
-  const response = await api.post("/api/organizations", {
-    name,
-    phone,
-    userId,
+  const response = await api.post("/api/org/register", {
+    dept_name: name,
+    dept_phone: phone,
+    admin_id: userId,
   });
 
   return response;

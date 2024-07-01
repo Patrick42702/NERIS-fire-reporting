@@ -3178,3 +3178,5 @@ Traceback (most recent call last):
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: base.models.models.MemberManager.create_user() got multiple values for keyword argument 'first_name'
 WARNING 2024-06-30 18:57:26,757 log Method Not Allowed: /api/member/register
+WARNING 2024-07-01 11:06:36,924 log Not Found: /api/
+WARNING 2024-07-01 11:07:02,512 log Not Found: /

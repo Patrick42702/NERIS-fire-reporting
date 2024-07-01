@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
+from django.conf import settings
 
 class MemberManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -25,8 +26,9 @@ class Member(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    organization = models.ForeignKey('organization', on_delete=models.CASCADE, null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
+    member_id = models.CharField(max_length=50, blank=True, null=True)
+    current_status = models.CharField(max_length=30, null=True, default=None)
 
     # Add fields for groups and user permissions
     groups = models.ManyToManyField(
@@ -65,14 +67,36 @@ class Member(AbstractBaseUser):
 
 class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    dept_name = models.CharField(max_length=255, null=False)
-    location = models.CharField(max_length=255)
-    fdid = models.IntegerField(null=False)
+    dept_name = models.CharField(max_length=255, default="")
+    dept_phone = models.CharField(max_length=100, default="")
+    admin_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="organization", null=True)
+    location = models.CharField(max_length=255, blank=True)
+    fdid = models.IntegerField(null=True, blank=True)
     verified = models.BooleanField(default=False, null=False)
+
+    def create_org(self, dept_name, dept_phone, admin_id, **validated_data):
+        self.dept_name = dept_name
+        self.dept_phone = dept_phone
+        self.admin_id = admin_id
+
+
+        for attr, value in validated_data.items():
+            setattr(self, attr, value)
+
+        self.save()
 
     def __str__(self):
         return self.dept_name
 
+class StatusRanges(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_ranges")
+    start_date = models.DateField()
+    end_date = models.DateField()
+    duration = models.DurationField()
+    status = models.CharField(max_length=100, default="temp", null=True)
+
+    def __str__(self):
+        return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'
 
 # class Activity(models.Model):
 #     activity_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

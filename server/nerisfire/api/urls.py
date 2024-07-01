@@ -1,6 +1,6 @@
 from django.urls import path, include
-from . import views
+from .views import CreateOrganizationView
 
 urlpatterns = [
-    path('orgs/', views.getOrganizations)
+    path('org/register', CreateOrganizationView.as_view(), name="register org")
 ]

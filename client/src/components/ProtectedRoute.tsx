@@ -3,22 +3,25 @@ import { jwtDecode } from "jwt-decode";
 import { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { useAppSelector } from "@/hooks";
+import { RootState } from "@/store";
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+  const userState = useAppSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    auth().catch(() => setIsAuthorized(false));
-  }, []);
+    auth();
+  }, [isAuthorized, userState.userInfo]);
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
     try {
-      const res = await api.post("/api/token/refresh/", {
+      const res = await api.post("/api/token/refresh", {
         refresh: refreshToken,
       });
       if (res.status === 200) {
@@ -35,6 +38,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   const auth = async () => {
     const token = localStorage.getItem(ACCESS_TOKEN);
+
     if (!token) {
       setIsAuthorized(false);
       return;

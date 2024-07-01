@@ -17,6 +17,8 @@ import CompanyLayout from "./pages/company/CompanyLayout";
 import Incidents from "./pages/company/Incidents";
 import Leaderboard from "./pages/company/Leaderboard";
 import Pricing from "./pages/landing/Pricing";
+import CompanyApplication from "./pages/company/CompanyApplication";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
@@ -28,6 +30,14 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route
+          path="/company/apply"
+          element={
+            <ProtectedRoute>
+              <CompanyApplication />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="verifications" element={<Verifications />} />
@@ -77,6 +87,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster  />
       {/* TODO: Footer */}
     </div>
   );

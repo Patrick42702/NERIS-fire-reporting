@@ -179,3 +179,12 @@ DETAIL:  Failing row contains (5, pbkdf2_sha256$720000$iFZD88hLUnUz0KtNifrJQY$/m
 
 WARNING 2024-06-30 15:03:25,792 log Forbidden: /api/orgs/
 WARNING 2024-06-30 15:09:45,976 log Unauthorized: /api/orgs/
+WARNING 2024-07-01 11:07:04,199 log Not Found: /admin
+WARNING 2024-07-01 11:07:04,346 log Not Found: /favicon.ico
+WARNING 2024-07-01 11:58:34,450 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:58:37,924 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:58:40,350 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:58:43,818 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:58:43,819 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:59:11,470 log Not Found: /api/token/refresh/
+WARNING 2024-07-01 11:59:11,471 log Not Found: /api/token/refresh/

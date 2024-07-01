@@ -21,8 +21,6 @@ const Navbar = () => {
   const [isMenuActive, setIsMenuActive] = useState(false);
   const navigate = useNavigate();
 
-  console.log(userInfo);
-
   const toggleMenuHandler = () => {
     setIsMenuActive((prevState) => !prevState);
   };
@@ -89,8 +87,26 @@ const Navbar = () => {
 
           {/* menu items */}
           <div className="mt-6 flex flex-col gap-y-5">
+            <Link
+              to="/"
+              className="font-medium text-lg md:text-xl text-foreground"
+            >
+              Home
+            </Link>
+            <Link
+              to="/pricing"
+              className="font-medium text-lg md:text-xl text-foreground"
+            >
+              Pricing
+            </Link>
             {userInfo ? (
               <>
+                <Link
+                  to="/company/apply"
+                  className="font-medium text-lg md:text-xl text-foreground"
+                >
+                  Apply for an Organization
+                </Link>
                 <Link
                   to="/dashboard"
                   className="font-medium text-lg md:text-xl text-foreground"
@@ -104,18 +120,6 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
-                  to="/"
-                  className="font-medium text-lg md:text-xl text-foreground"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/pricing"
-                  className="font-medium text-lg md:text-xl text-foreground"
-                >
-                  Pricing
-                </Link>
-                <Link
                   className={buttonVariants({ variant: "secondary" })}
                   to="/sign-in"
                 >
@@ -127,6 +131,22 @@ const Navbar = () => {
               </>
             )}
           </div>
+        </div>
+
+        {/* Desktop */}
+        <div className="hidden lg:flex gap-x-6 items-center">
+          <Link
+            to="/"
+            className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
+          >
+            Home
+          </Link>
+          <Link
+            to="/pricing"
+            className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
+          >
+            Pricing
+          </Link>
         </div>
 
         {userInfo ? (
@@ -151,10 +171,23 @@ const Navbar = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/company/apply")}>
+                    Apply for an Organization
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Dashboard
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleLogout}
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -163,22 +196,6 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {/* Desktop */}
-            <div className="hidden lg:flex gap-x-6 items-center">
-              <Link
-                to="/"
-                className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
-              >
-                Home
-              </Link>
-              <Link
-                to="/pricing"
-                className="font-medium text-md md:text-lg text-foreground hover:text-primary transition-all duration-200"
-              >
-                Pricing
-              </Link>
-            </div>
-
             {/* Desktop */}
             <div className="hidden lg:flex gap-x-4 items-center">
               <Link

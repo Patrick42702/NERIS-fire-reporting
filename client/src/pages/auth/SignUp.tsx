@@ -2,6 +2,8 @@ import MainLayout from "@/components/MainLayout";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { createUser } from "@/services/user";
 import { RootState } from "@/store";
@@ -33,6 +35,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state: RootState) => state.user);
+  const { toast } = useToast();
 
   const { mutate: registerUser, isPending: isUserPending } = useMutation({
     mutationFn: (data: Partial<RegisterUserInputs>) => {
@@ -45,25 +48,21 @@ const SignUp = () => {
       });
     },
     onSuccess: (data) => {
-      console.log(data);
+      toast({
+        title: "Account Created",
+        description: "Sign in to your account",
+        action: (
+          <ToastAction onClick={() => navigate("/sign-in")} altText="Try again">
+            Sign in
+          </ToastAction>
+        ),
+      });
+      navigate("/")
     },
     onError: (err) => {
       console.error(err.message);
     },
   });
-
-  // const { mutate: registerOrg, isPending: isOrgPending } = useMutation({
-  //   mutationFn: (data: Partial<RegisterUserInputs>) => {
-  //     return createOrganization({
-  //       organization: data.organization,
-  //       organizationPhone: data.organizationPhone,
-  //     });
-  //   },
-  //   onSuccess: (data) => {},
-  //   onError: (err) => {
-  //     console.error(err.message);
-  //   },
-  // });
 
   useEffect(() => {
     if (userState.userInfo) {
@@ -74,13 +73,7 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<RegisterUserInputs> = async (data) => {
     const { fname, lname, email, phone, password } = data;
 
-    // registerOrg({ organization, organizationPhone });
-
     registerUser({ fname, lname, email, phone, password });
-
-    navigate("/");
-    alert("Account registered, hang on tight while we verify your account.");
-    // TODO: Link user and org
   };
 
   const password = watch("password");
@@ -268,8 +261,15 @@ const SignUp = () => {
               </>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isUserPending ? true : false}>
-              Create an account {isUserPending && <Loader2 className="animate-spin ml-1.5 w-5 h-5" />}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isUserPending ? true : false}
+            >
+              Create an account{" "}
+              {isUserPending && (
+                <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
+              )}
             </Button>
           </form>
           <Link

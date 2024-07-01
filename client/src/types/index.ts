@@ -5,8 +5,6 @@ export interface RegisterUserInputs {
   phone: number;
   password: string;
   confirmPassword: string;
-  organization: string;
-  organizationPhone: number;
 }
 
 export interface LoginUserInputs {

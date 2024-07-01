@@ -159,11 +159,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'authenticate.backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',  # keep the default backend for other purposes
-]
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

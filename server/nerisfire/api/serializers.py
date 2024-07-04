@@ -13,6 +13,16 @@ class OrganizationSerializer(serializers.ModelSerializer):
             org = models.Organization.create_org(**validated_data)
             return org
 
+class StatusRangesSeralizer(serializers.ModelSerializer):
+    class Meta:
+        model = models.StatusRanges
+        fields = ["id", "user", "start_date", "end_date", "status", "duration"]
+
+        def create(**validated_data):
+            status_ranges = models.StatusRanges.create_ranges(**validated_data)
+            return status_ranges
+
+
 # class IncidentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = models.Incident

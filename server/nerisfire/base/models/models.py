@@ -79,7 +79,6 @@ class Organization(models.Model):
         self.dept_phone = dept_phone
         self.admin_id = admin_id
 
-
         for attr, value in validated_data.items():
             setattr(self, attr, value)
 
@@ -94,6 +93,29 @@ class StatusRanges(models.Model):
     end_date = models.DateField()
     duration = models.DurationField()
     status = models.CharField(max_length=100, default="temp", null=True)
+
+    def create_ranges(self, **validated_data):
+
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            if isinstance(user_data, int):
+                Member = get_user_model()
+                user_data = Member.objects.get(id=user_data)
+            self.user = user_data
+
+        for attr, value in validated_data.items():
+            if attr == 'duration':
+                if isinstance(value, str):
+                    # If the duration is a string, parse it into a timedelta object
+                    days, time = value.split()
+                    hours, minutes, seconds = map(int, time.split(':'))
+                    value = timedelta(days=int(days), hours=hours, minutes=minutes, seconds=seconds)
+                elif isinstance(value, dict):
+                    # If the duration is a dict, convert it to timedelta
+                    value = timedelta(**value)
+            setattr(self, attr, value)
+
+        self.save()
 
     def __str__(self):
         return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'

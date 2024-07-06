@@ -64,7 +64,6 @@ class Member(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
-
 class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     dept_name = models.CharField(max_length=255, default="")

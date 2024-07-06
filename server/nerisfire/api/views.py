@@ -17,8 +17,18 @@ class ListOrganizationView(generics.ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    # GETs all organizations that contain the queried string (if any)
+    def get_queryset(self):
+        queryset = Organization.objects.all()
+        dept_name = self.request.query_params.get('dept_name', None)
+        
+        if dept_name:
+            queryset = queryset.filter(dept_name__icontains=dept_name)
+        
+        return queryset
 
-# GET request -> retriev es a single org by its ID
+# GET request -> retrieves a single org by its ID
 class RetrieveOrganizationView(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer

@@ -14,7 +14,6 @@ class MemberAdmin(UserAdmin):
         ('Personal info', {'fields': ('first_name', 'last_name', 'phone')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         ('Important dates', {'fields': [('last_login')]}),
-        ('Organization', {'fields': ['organization']})
     )
     add_fieldsets = (
         (None, {

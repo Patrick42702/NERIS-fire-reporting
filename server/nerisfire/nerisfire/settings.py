@@ -15,6 +15,7 @@ import os
 from dotenv import load_dotenv
 import base
 import logging
+from datetime import timedelta
 logger = logging.getLogger('authenticate')  # Use the same logger name as defined in settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -141,6 +142,11 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
 
 AUTH_USER_MODEL = 'base.Member'
 

@@ -17,6 +17,7 @@ class StatusRangesSeralizer(serializers.ModelSerializer):
     class Meta:
         model = models.StatusRanges
         fields = ["id", "user", "start_date", "end_date", "status", "duration"]
+        ordering = ['user']
 
         def create(**validated_data):
             status_ranges = models.StatusRanges.create_ranges(**validated_data)

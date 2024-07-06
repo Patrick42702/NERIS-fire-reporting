@@ -9,34 +9,34 @@ const CompanyDashboard = () => {
       accessorKey: "rank",
       header: "Rank",
       cell: ({ row }: any) => {
-        console.log(row.original);
-        if (row.original.rank === 1) {
+        const user = row.original
+        if (user.rank === 1) {
           return (
             <span className="bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center text-white">
-              {row.original.rank}
+              {user.rank}
             </span>
           );
         }
 
-        if (row.original.rank === 2) {
+        if (user.rank === 2) {
           return (
             <span className="bg-gray-400 rounded-full h-8 w-8 flex items-center justify-center text-white">
-              {row.original.rank}
+              {user.rank}
             </span>
           );
         }
 
-        if (row.original.rank === 3) {
+        if (user.rank === 3) {
           return (
             <span className="bg-amber-800 rounded-full h-8 w-8 flex items-center justify-center text-white">
-              {row.original.rank}
+              {user.rank}
             </span>
           );
         }
 
         return (
           <span className="rounded-full h-8 w-8 flex items-center justify-center">
-            {row.original.rank}
+            {user.rank}
           </span>
         );
       },

@@ -6,7 +6,6 @@ import Landing from "./pages/landing/Landing";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Organizations from "./pages/admin/Organizations";
-import Users from "./pages/admin/Users";
 import Verifications from "./pages/admin/Verifications";
 
 import NotFound from "./components/NotFound";
@@ -19,6 +18,7 @@ import Leaderboard from "./pages/company/Leaderboard";
 import Pricing from "./pages/landing/Pricing";
 import CompanyApplication from "./pages/company/CompanyApplication";
 import { Toaster } from "./components/ui/toaster";
+import CompanyAdminTab from "./pages/company/CompanyAdminTab";
 
 function App() {
   return (
@@ -38,14 +38,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="verifications" element={<Verifications />} />
           <Route path="users" element={<Users />} />
           <Route path="organizations" element={<Organizations />} />
-        </Route>
+        </Route> */}
         <Route
-          path="/company/:id"
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <CompanyLayout />
@@ -77,10 +77,10 @@ function App() {
             }
           />
           <Route
-            path="leaderboard"
+            path="admin"
             element={
               <ProtectedRoute>
-                <Leaderboard />
+                <CompanyAdminTab />
               </ProtectedRoute>
             }
           />

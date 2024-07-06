@@ -4,8 +4,10 @@ import {
   FireExtinguisher,
   LayoutDashboardIcon,
   Menu,
+  Shield,
   Siren,
   Trophy,
+  User,
   Wrench,
   X,
 } from "lucide-react";
@@ -31,25 +33,31 @@ const Header = ({ page, id }: HeaderProps) => {
       name: "dashboard",
       title: "Dashboard",
       icon: LayoutDashboardIcon,
-      link: `/company/${id}`,
+      link: `/dashboard`,
     },
     {
       name: "activity",
       title: "Activity",
       icon: Activity,
-      link: `/company/${id}/activity`
+      link: `/dashboard/activity`
     },
     {
       name: "incidents",
       title: "Incidents",
       icon: Siren,
-      link: `/company/${id}/incidents`,
+      link: `/dashboard/incidents`,
     },
+    {
+      name: "admin",
+      title: "Admin",
+      icon: Shield,
+      link: `/dashboard/admin`
+    }
     // {
     //   name: "leaderboard",
     //   title: "Leaderboard",
     //   icon: Trophy,
-    //   link: `/company/${id}/leaderboard`,
+    //   link: `/dashboard/leaderboard`,
     // },
   ];
 

@@ -1,7 +1,9 @@
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import permissions, viewsets, generics
 from base.models import Organization, StatusRanges
 from .serializers import OrganizationSerializer, StatusRangesSeralizer
+from datetime import datetime
 import logging
 
 logger = logging.getLogger('authenticate')
@@ -33,7 +35,7 @@ class RetrieveOrganizationView(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
 class StatusRangesView(generics.ListAPIView):
     queryset = StatusRanges.objects.all()
     serializer_class = StatusRangesSeralizer
@@ -42,13 +44,32 @@ class StatusRangesView(generics.ListAPIView):
     ordering = ['id']  # Default ordering
 
     def get_queryset(self):
+        queryset = StatusRanges.objects.all()
+
         user_bool = self.request.query_params.get('user_bool', None)
-        logger.debug(f'this is the value of user_bool {user_bool}')
         if user_bool:
             user = self.request.user
-            logger.debug(f"this is the user object: {user}")
-            return StatusRanges.objects.filter(user=user)
-        return StatusRanges.objects.all()
+            queryset = StatusRanges.objects.filter(user=user)
+
+        start_date = self.request.query_params.get('start_date', None)
+        if start_date:
+            # assume start_date passed in as appropriate format string
+            try:
+                dt = datetime.strptime(start_date, '%Y-%m-%d')
+                queryset = StatusRanges.objects.filter(Q(start_date__gt=dt))
+            except ValueError as e:
+                return Response(f"Error: {e}", 400)
+
+        end_date = self.request.query_params.get('end_date', None)
+        if end_date:
+            # assume end_date passed in as appropriate format string
+            try:
+                dt = datetime.strptime(end_date, '%Y-%m-%d')
+                queryset = StatusRanges.objects.filter(Q(end_date__lt=dt))
+            except ValueError as e:
+                return Response(f"Error: {e}", 400)
+
+        return queryset
 
 class CreateStatusRangesView(generics.CreateAPIView):
     queryset = StatusRanges.objects.all()

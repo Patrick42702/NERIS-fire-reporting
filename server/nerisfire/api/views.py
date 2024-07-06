@@ -28,13 +28,17 @@ class StatusRangesView(generics.ListAPIView):
     queryset = StatusRanges.objects.all()
     serializer_class = StatusRangesSeralizer
     permission_classes = [permissions.IsAuthenticated]
-    ordering_fields = ['user']  # Fields that can be ordered
-    ordering = ['user']  # Default ordering
+    ordering_fields = ['id']  # Fields that can be ordered
+    ordering = ['id']  # Default ordering
 
     def get_queryset(self):
-        user = self.request.user
-        logger.debug(f"this is the user object: {user}")
-        return StatusRanges.objects.filter(user=user)
+        user_bool = self.request.query_params.get('user_bool', None)
+        logger.debug(f'this is the value of user_bool {user_bool}')
+        if user_bool:
+            user = self.request.user
+            logger.debug(f"this is the user object: {user}")
+            return StatusRanges.objects.filter(user=user)
+        return StatusRanges.objects.all()
 
 class CreateStatusRangesView(generics.CreateAPIView):
     queryset = StatusRanges.objects.all()

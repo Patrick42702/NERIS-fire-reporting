@@ -24,8 +24,8 @@ class StatusRangesView(generics.ListAPIView):
         logger.debug(f'this is the value of user_bool {user_bool}')
         if user_bool:
             user = self.request.user
-            return StatusRanges.objects.filter(user=user)
             logger.debug(f"this is the user object: {user}")
+            return StatusRanges.objects.filter(user=user)
         return StatusRanges.objects.all()
 
 

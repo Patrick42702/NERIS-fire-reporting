@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
 from django.conf import settings
+import datetime
+import logging
+
+logger = logging.getLogger('api')
 
 class MemberManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -90,31 +94,39 @@ class StatusRanges(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_ranges")
     start_date = models.DateField()
     end_date = models.DateField()
-    duration = models.DurationField()
+    duration = models.DurationField(default=datetime.timedelta(hours=2))
     status = models.CharField(max_length=100, default="temp", null=True)
 
-    def create_ranges(self, **validated_data):
-
+    @staticmethod
+    def create_ranges(**validated_data):
+        status_range = StatusRanges()
         user_data = validated_data.pop('user', None)
+        start_date = validated_data.pop('start_date', None)
+        end_date = validated_data.pop('end_date', None)
+        status = validated_data.pop('status', None)
+        duration = None
+
         if user_data:
             if isinstance(user_data, int):
                 Member = get_user_model()
                 user_data = Member.objects.get(id=user_data)
-            self.user = user_data
+            status_range.user = user_data
 
-        for attr, value in validated_data.items():
-            if attr == 'duration':
-                if isinstance(value, str):
-                    # If the duration is a string, parse it into a timedelta object
-                    days, time = value.split()
-                    hours, minutes, seconds = map(int, time.split(':'))
-                    value = timedelta(days=int(days), hours=hours, minutes=minutes, seconds=seconds)
-                elif isinstance(value, dict):
-                    # If the duration is a dict, convert it to timedelta
-                    value = timedelta(**value)
-            setattr(self, attr, value)
+        if status:
+            status_range.status = status
 
-        self.save()
+        if start_date and end_date:
+            duration = end_date - start_date
+        else:
+            end_date = datetime.date.today()
+            duration = end_date - start_date
+
+        status_range.start_date = start_date
+        status_range.end_date = end_date
+        status_range.duration = duration
+
+        status_range.save()
+        return status_range
 
     def __str__(self):
         return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'

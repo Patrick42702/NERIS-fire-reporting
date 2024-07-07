@@ -198,7 +198,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'authenticate': {  # Replace 'myapp' with your app name or specific logger name
+        'api': {  # Replace 'myapp' with your app name or specific logger name
             'handlers': ['debugger'],
             'level': 'DEBUG',
             'propagate': False,

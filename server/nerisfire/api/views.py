@@ -19,15 +19,15 @@ class ListOrganizationView(generics.ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     # GETs all organizations that contain the queried string (if any)
     def get_queryset(self):
         queryset = Organization.objects.all()
         dept_name = self.request.query_params.get('dept_name', None)
-        
+
         if dept_name:
             queryset = queryset.filter(dept_name__icontains=dept_name)
-        
+
         return queryset
 
 # GET request -> retrieves a single org by its ID
@@ -45,7 +45,7 @@ class StatusRangesView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = StatusRanges.objects.all()
-
+        logger.debug("Calling the queryset function for status ranges")
         user_bool = self.request.query_params.get('user_bool', None)
         if user_bool:
             user = self.request.user
@@ -75,5 +75,5 @@ class CreateStatusRangesView(generics.CreateAPIView):
     queryset = StatusRanges.objects.all()
     serializer_class = StatusRangesSeralizer
     permission_classes = [permissions.IsAuthenticated]
-
-
+    ordering_fields = ['id']  # Fields that can be ordered
+    ordering = ['id']  # Default ordering

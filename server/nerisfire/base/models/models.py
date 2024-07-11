@@ -90,8 +90,8 @@ class Organization(models.Model):
     def __str__(self):
         return self.dept_name
 
-class StatusRanges(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_ranges")
+class StatusHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_history")
     start_date = models.DateField()
     end_date = models.DateField()
     duration = models.DurationField(default=datetime.timedelta(hours=2))
@@ -99,7 +99,7 @@ class StatusRanges(models.Model):
 
     @staticmethod
     def create_ranges(**validated_data):
-        status_range = StatusRanges()
+        status_history = StatusHistory()
         user_data = validated_data.pop('user', None)
         start_date = validated_data.pop('start_date', None)
         end_date = validated_data.pop('end_date', None)
@@ -110,10 +110,10 @@ class StatusRanges(models.Model):
             if isinstance(user_data, int):
                 Member = get_user_model()
                 user_data = Member.objects.get(id=user_data)
-            status_range.user = user_data
+            status_history.user = user_data
 
         if status:
-            status_range.status = status
+            status_history.status = status
 
         if start_date and end_date:
             duration = end_date - start_date
@@ -121,12 +121,12 @@ class StatusRanges(models.Model):
             end_date = datetime.date.today()
             duration = end_date - start_date
 
-        status_range.start_date = start_date
-        status_range.end_date = end_date
-        status_range.duration = duration
+        status_history.start_date = start_date
+        status_history.end_date = end_date
+        status_history.duration = duration
 
-        status_range.save()
-        return status_range
+        status_history.save()
+        return status_history
 
     def __str__(self):
         return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'

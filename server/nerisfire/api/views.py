@@ -36,24 +36,6 @@ class RetrieveUpdateDestroyOrganizationView(generics.RetrieveUpdateDestroyAPIVie
     serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# # GET request -> retrieves a single org by its ID
-# class RetrieveOrganizationView(generics.RetrieveAPIView):
-#     queryset = Organization.objects.all()
-#     serializer_class = OrganizationSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-    
-# # PUT request -> updates a single org by its ID
-# class UpdateOrganizationView(generics.UpdateAPIView):
-#     queryset = Organization.objects.all()
-#     serializer_class = OrganizationSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-   
-# # DELETE request -> deletes a single org by its ID 
-# class DeleteOrganizationView(generics.DestroyAPIView):
-#     queryset = Organization.objects.all()
-#     serializer_class = OrganizationSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
 class StatusRangesView(generics.ListAPIView):
     queryset = StatusRanges.objects.all()
     serializer_class = StatusRangesSeralizer

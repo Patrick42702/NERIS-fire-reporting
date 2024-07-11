@@ -5,8 +5,6 @@ urlpatterns = [
     path('org/register', CreateOrganizationView.as_view(), name="register org"),
     path('org/list', ListOrganizationView.as_view(), name="list_orgs"),
     path('org/<uuid:pk>', RetrieveUpdateDestroyOrganizationView.as_view(), name="retrieve_update_destroy_org"),
-    # path('org/<uuid:pk>/update/', UpdateOrganizationView.as_view(), name="update_org"),
-    # path('org/<uuid:pk>/delete/', DeleteOrganizationView.as_view(), name="delete_org"),
     path('status_ranges', StatusRangesView.as_view(), name="get statuses"),
     path('status_ranges/register', CreateStatusRangesView.as_view(), name="create statuses")
 ]

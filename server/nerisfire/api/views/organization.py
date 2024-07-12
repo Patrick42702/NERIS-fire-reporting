@@ -31,3 +31,10 @@ class RetrieveOrganizationView(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+# GETs, PUTs, and/or DELETEs a single org by its ID
+class RetrieveUpdateDestroyOrganizationView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+

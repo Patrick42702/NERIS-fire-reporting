@@ -23,7 +23,7 @@ import {
 
 interface AddUserInputs {
   email: string;
-  role: "admin" | "moderator" | "member";
+  role: string;
 }
 
 const AddUserModal = () => {
@@ -43,7 +43,7 @@ const AddUserModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="outline">
           <PlusCircle className="mr-1.5 h-5 w-5" /> Add User
         </Button>
       </DialogTrigger>

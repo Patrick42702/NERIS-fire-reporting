@@ -1,3 +1,4 @@
+import AddRoleModal from "@/components/AddRoleModal";
 import AddUserModal from "@/components/AddUserModal";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -30,16 +31,7 @@ const CompanyAdminTab = () => {
 
         return (
           <div className="min-w-[115px]">
-            <div
-              className={cn(
-                "flex w-fit items-center gap-2 rounded-full px-4 py-2",
-                {
-                  "bg-red-600": user.role === "admin",
-                  "bg-blue-600": user.role === "moderator",
-                  "bg-orange-600": user.role === "member",
-                }
-              )}
-            >
+            <div className="flex w-fit items-center gap-2 rounded-full px-4 py-2 bg-primary">
               <p className="text-[12px] leading-[14px] font-semibold capitalize text-primary-foreground">
                 {user.role}
               </p>
@@ -114,6 +106,50 @@ const CompanyAdminTab = () => {
       status: "active",
     },
   ];
+
+  const roleColumn = [
+    {
+      accessorKey: "role",
+      header: "Role",
+    },
+    {
+      accessorKey: "action",
+      header: "Actions",
+      id: "actions",
+      cell: ({ row }: any) => {
+        const role = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>Remove</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  const roleData = [
+    {
+      id: 1,
+      role: "Captain",
+    },
+    {
+      id: 2,
+      role: "Moderator",
+    },
+  ];
+
   return (
     <>
       <div className="flex items-center">
@@ -129,6 +165,16 @@ const CompanyAdminTab = () => {
           pageSize={10}
           filter="email"
           title={{ text: "Manage Users" }}
+        />
+      </div>
+      <div className="w-full mx-auto mt-4 md:mt-12">
+        <AddRoleModal />
+        <DataTable
+          columns={roleColumn}
+          data={roleData}
+          pageSize={10}
+          filter="role"
+          title={{ text: "Manage Roles", className: "text-foreground" }}
         />
       </div>
     </>

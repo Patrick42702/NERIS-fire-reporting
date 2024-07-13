@@ -1,8 +1,9 @@
 from base.models import Member
+from django.contrib.auth.models import Group
 #from rest_framework import serializers
 from rest_framework import generics
-from .seralizers import MemberSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from .seralizers import MemberSerializer, GroupSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 import logging
 
@@ -15,3 +16,7 @@ class CreateMemberView(generics.CreateAPIView):
     serializer_class = MemberSerializer
     permission_classes = [AllowAny]
 
+class CreateGroupView(generics.CreateAPIView):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAdminUser]

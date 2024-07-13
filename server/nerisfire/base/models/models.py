@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
 import uuid
 from django.conf import settings
 import datetime
@@ -68,6 +68,7 @@ class Member(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
+
 class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     dept_name = models.CharField(max_length=255, default="")
@@ -89,6 +90,11 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.dept_name
+
+class Role(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50)
+    organization = models.ForeignKey(Organization, models.CASCADE, related_name="organization")
 
 class StatusHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_history")

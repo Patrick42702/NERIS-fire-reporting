@@ -1,0 +1,59 @@
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
+import { decodeToken } from "@/lib/utils";
+import { LoginUserInputs, RegisterUserInputs } from "@/types";
+import axios from "axios";
+
+export const createUser = async ({
+  fname,
+  lname,
+  email,
+  phone,
+  password,
+}: Partial<RegisterUserInputs>) => {
+  try {
+    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/member/register", {
+      first_name: fname,
+      last_name: lname,
+      email,
+      phone,
+      password,
+    });
+
+    if (response.status !== 201) {
+      throw new Error(`Failed to create user: ${response.statusText}`);
+    }
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error(error.message);
+  }
+};
+
+export const login = async ({ email, password }: LoginUserInputs) => {
+  try {
+    const response = await axios.post(import.meta.env.VITE_API_URL + "/api/token", { email, password });
+
+    // Decode the access token
+    const decodedToken = decodeToken(response.data.access);
+
+    // Store access_token, refresh_token, and user info in localStorage
+    localStorage.clear();
+    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+    localStorage.setItem("user", JSON.stringify(decodedToken));
+
+    return {
+      access: response.data.access,
+      refresh: response.data.refresh,
+      ...decodedToken,
+    };
+  } catch (error: any) {
+    if (error.response && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error(error.message);
+  }
+};

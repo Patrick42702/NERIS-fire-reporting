@@ -5,7 +5,7 @@ from base.models import StatusHistory
 from ..serializers import StatusHistorySeralizer
 from datetime import datetime
 
-class StatusHistoryView(generics.ListAPIView):
+class ListStatusHistoryView(generics.ListAPIView):
     queryset = StatusHistory.objects.all()
     serializer_class = StatusHistorySeralizer
     permission_classes = [permissions.IsAuthenticated]
@@ -46,11 +46,10 @@ class CreateStatusHistoryView(generics.CreateAPIView):
     ordering_fields = ['id']  # Fields that can be ordered
     ordering = ['id']  # Default ordering
 
-class EditStatusHistoryView(generics.UpdateAPIView):
+class RetrieveUpdateDestroyStatusHistoryView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StatusHistory.objects.all()
     serializer_class = StatusHistorySeralizer
     permission_classes = [permissions.IsAuthenticated]
-
 
 
 

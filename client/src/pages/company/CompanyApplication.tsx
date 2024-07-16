@@ -1,16 +1,27 @@
 import MainLayout from "@/components/MainLayout";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/hooks";
+import { CompanyApplicationValidator } from "@/lib/validations/company";
 import { createOrganization } from "@/services/organization";
 import { RootState } from "@/store";
 import { RegisterOrgInputs, UserInfo } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const CompanyApplication = () => {
   const userState = useAppSelector(
@@ -19,19 +30,16 @@ const CompanyApplication = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterOrgInputs>({
+  const form = useForm<z.infer<typeof CompanyApplicationValidator>>({
+    resolver: zodResolver(CompanyApplicationValidator),
     defaultValues: {
       name: "",
-      phone: undefined,
+      phone: "",
     },
   });
 
   const { mutate: registerOrg, isPending } = useMutation({
-    mutationFn: (data: RegisterOrgInputs) => {
+    mutationFn: (data: z.infer<typeof CompanyApplicationValidator>) => {
       const { name, phone } = data;
       if (!userState.userInfo) {
         throw new Error("User info is not available");
@@ -60,7 +68,9 @@ const CompanyApplication = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterOrgInputs> = async (data) => {
+  const onSubmit = async (
+    data: z.infer<typeof CompanyApplicationValidator>
+  ) => {
     const { name, phone } = data;
 
     registerOrg({ name, phone });
@@ -83,67 +93,46 @@ const CompanyApplication = () => {
             </div>
 
             {/* form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name" className="text-slate-600">
-                  Organization Name
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Organization Name"
-                  className="bg-gray-50 drop-shadow-sm"
-                  {...register("name", {
-                    minLength: {
-                      value: 1,
-                      message: "Org. Name must be at least 1 character",
-                    },
-                    required: {
-                      value: true,
-                      message: "Org. Name is required.",
-                    },
-                  })}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Organization Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.name?.message && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name?.message}
-                  </p>
-                )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="phone" className="text-slate-600">
-                  Organization Phone
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="(xxx) xxx-xxxx"
-                  className="bg-gray-50 drop-shadow-sm"
-                  {...register("phone", {
-                    required: {
-                      value: true,
-                      message: "Phone number is required.",
-                    },
-                    pattern: {
-                      value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
-                      message: "Please enter a valid phone number.",
-                    },
-                  })}
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Organization Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="xxx-xxx-xxxx" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.phone?.message && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.phone?.message}
-                  </p>
-                )}
-              </div>
 
-              <Button className="w-full" disabled={isPending ? true : false}>
-                Apply{" "}
-                {isPending && (
-                  <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
-                )}
-              </Button>
-            </form>
+                <Button className="w-full" disabled={isPending ? true : false}>
+                  Apply{" "}
+                  {isPending && (
+                    <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
+                  )}
+                </Button>
+              </form>
+            </Form>
           </div>
         </div>
       </div>

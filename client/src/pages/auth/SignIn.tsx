@@ -12,6 +12,17 @@ import { login } from "@/services/user";
 import { userActions } from "@/store/reducers/userReducer";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks";
+import { UserSignInValidator } from "@/lib/validations/user";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +30,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ email, password }: LoginUserInputs) => {
+    mutationFn: ({ email, password }: z.infer<typeof UserSignInValidator>) => {
       return login({ email, password });
     },
     onSuccess: (data) => {
@@ -33,11 +44,8 @@ const SignIn = () => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginUserInputs>({
+  const form = useForm<z.infer<typeof UserSignInValidator>>({
+    resolver: zodResolver(UserSignInValidator),
     defaultValues: {
       email: "",
       password: "",
@@ -50,7 +58,7 @@ const SignIn = () => {
     }
   }, [userState.userInfo]);
 
-  const onSubmit: SubmitHandler<LoginUserInputs> = async (data) => {
+  const onSubmit = async (data: z.infer<typeof UserSignInValidator>) => {
     const { email, password } = data;
 
     mutate({ email, password });
@@ -70,66 +78,45 @@ const SignIn = () => {
             </div>
 
             {/* form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-slate-600">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  {...register("email", {
-                    required: {
-                      value: true,
-                      message: "Email is required.",
-                    },
-                    pattern: {
-                      value:
-                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: "Please enter a valid email",
-                    },
-                  })}
-                  className="bg-gray-50 drop-shadow-sm"
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="john@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.email?.message && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.email?.message}
-                  </p>
-                )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password" className="text-slate-600">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password", {
-                    required: {
-                      value: true,
-                      message: "Password is required.",
-                    },
-                    minLength: {
-                      value: 6,
-                      message: "Password length must be at least 6 characters.",
-                    },
-                  })}
-                  className="bg-gray-50 drop-shadow-sm"
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.password?.message && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.password?.message}
-                  </p>
-                )}
-              </div>
-              <Button className="w-full" disabled={isPending ? true : false}>
-                Sign in{" "}
-                {isPending && (
-                  <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
-                )}
-              </Button>
-            </form>
+                <Button className="w-full" disabled={isPending ? true : false}>
+                  Sign in{" "}
+                  {isPending && (
+                    <Loader2 className="animate-spin ml-1.5 w-5 h-5" />
+                  )}
+                </Button>
+              </form>
+            </Form>
             <Link
               to="/sign-up"
               className={buttonVariants({

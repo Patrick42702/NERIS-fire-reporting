@@ -5,3 +5,4 @@ djangorestframework
 djangorestframework-simplejwt
 PyJWT
 django-cors-headers
+drf-access-policy

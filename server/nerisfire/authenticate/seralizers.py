@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from base.models import Member
-from django.contrib.auth.models import Group
+from base.models import Member, Role, OrganizationRole
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,7 +13,12 @@ class MemberSerializer(serializers.ModelSerializer):
         )
         return member
 
-class GroupSerializer(serializers.ModelSerializer):
+class RoleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Group
-        fields = ["name", "permissions"]
+        model = Role
+        fields = ["name", "organization"]
+
+class OrganizationRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrganizationRole
+        fields = ['organization', 'role', 'user']

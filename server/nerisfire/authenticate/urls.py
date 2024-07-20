@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from .views import CreateMemberView, CreateGroupView
+from .views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -11,5 +11,9 @@ urlpatterns = [
     path('token', TokenObtainPairView.as_view(), name="get_token"),
     path('token/refresh', TokenRefreshView.as_view(), name="refresh"),
 
-    path('group/create', CreateGroupView.as_view(), name="create group"),
+    path('role/create', CreateRoleView.as_view(), name="create role"),
+    path('role', ListRoleView.as_view(), name="get roles"),
+
+    path('organization-roles', OrganizationRoleListView.as_view(), name='organization-role-list'),
+    path('organization-roles/create', OrganizationRoleCreateView.as_view(), name='organization-role-create'),
 ]

@@ -96,6 +96,17 @@ class Role(models.Model):
     name = models.CharField(max_length=50)
     organization = models.ForeignKey(Organization, models.CASCADE, related_name="organization")
 
+    def __str__(self):
+        return self.name
+
+class OrganizationRole(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    user = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('organization', 'role', 'user')
+
 class StatusHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_history")
     start_date = models.DateField()

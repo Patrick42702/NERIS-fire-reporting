@@ -28,7 +28,7 @@ class ListOrganizationView(AccessViewSetMixin, generics.ListAPIView):
         if dept_name:
             queryset = queryset.filter(dept_name__icontains=dept_name)
 
-        return self.access_policy.scope_queryset(self, self.request, self.queryset)
+        return queryset
 
 
 # GETs, PUTs, and/or DELETEs a single org by its ID

@@ -104,6 +104,9 @@ class OrganizationRole(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     user = models.ForeignKey(Member, on_delete=models.CASCADE)
 
+    def get_organization_roles_by_user(user_id):
+        return OrganizationRole.objects.filter(user_id=user_id)
+
     class Meta:
         unique_together = ('organization', 'role', 'user')
 

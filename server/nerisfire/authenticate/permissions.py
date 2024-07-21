@@ -1,42 +1,43 @@
 from rest_access_policy import AccessPolicy
+from rest_framework import permissions
+from base.models import OrganizationRole
 import logging
+from typing import *
 
 logger = logging.getLogger('api')
 class OrganizationAccessPolicy(AccessPolicy):
+    def get_user_group_values(self, user) -> List[str]:
+        user_roles = OrganizationRole.get_organization_roles_by_user(user.id)
+        logger.debug(user_roles)
+        return list(user_roles)
+
+    group_prefix = "role:"
+
     statements = [
         {
-            "action": ["create"],
-            "principal": ["role:admin"],
-            "effect": "deny"
+            "action": ["CreateOrganizationView"],
+            "principal": ["*"],
+            "effect": "allow"
         },
         {
-            "action": ["list", "retrieve"],
-            "principal": ["role:admin"],
+            "action": ["ListOrganizationView"],
+            "principal": ["*"],
+            "effect": "allow"
+        },
+        {
+            "action": ["ListOrganizationView"],
+            "principal": ["admin"],
             "effect": "allow"
         },
         {
             "action": ["update", "partial_update"],
-            "principal": ["role:editor"],
+            "principal": ["*"],
             "effect": "allow"
         },
         {
             "action": ["destroy"],
-            "principal": ["role:admin"],
+            "principal": ["*"],
             "effect": "allow"
         }
     ]
-
-    def get_principal(self, request):
-        # Assuming the user has only one role per organization for simplicity
-        logger.debug("calling the get_principal function")
-        organization_role = OrganizationRole.objects.filter(user=request.user, organization=request.organization).first()
-        if organization_role:
-            logger.debug("found the organization role")
-            return f"role:{organization_role.role.name.lower()}"
-        return None
-
-    def scope_queryset(self, request, queryset):
-        # Filter organizations based on the user's roles
-        logger.debug("calling scope queryset")
-        return queryset.filter(organizationrole__user=request.user)
 

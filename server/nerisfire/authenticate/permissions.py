@@ -8,8 +8,9 @@ logger = logging.getLogger('api')
 class OrganizationAccessPolicy(AccessPolicy):
     def get_user_group_values(self, user) -> List[str]:
         user_roles = OrganizationRole.get_organization_roles_by_user(user.id)
-        logger.debug(user_roles)
-        return list(user_roles)
+        role_list = [str(obj.role) for obj in user_roles]
+        logger.debug(f"these are the user roles of this user: {role_list}")
+        return list(role_list)
 
     group_prefix = "role:"
 
@@ -21,12 +22,7 @@ class OrganizationAccessPolicy(AccessPolicy):
         },
         {
             "action": ["ListOrganizationView"],
-            "principal": ["*"],
-            "effect": "allow"
-        },
-        {
-            "action": ["ListOrganizationView"],
-            "principal": ["admin"],
+            "principal": ["role:company_admin"],
             "effect": "allow"
         },
         {

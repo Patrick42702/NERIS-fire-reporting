@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, viewsets, generics
 from ..serializers import OrganizationSerializer
 from base.models import Organization
-from authenticate.permissions import OrganizationAccessPolicy
+# from authenticate.permissions import OrganizationAccessPolicy
 from rest_access_policy import AccessViewSetMixin
 import logging
 logger = logging.getLogger('api')
@@ -12,13 +12,11 @@ logger = logging.getLogger('api')
 class CreateOrganizationView(generics.CreateAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-    access_policy = OrganizationAccessPolicy
 
 # GET request -> list of all orgs
 class ListOrganizationView(AccessViewSetMixin, generics.ListAPIView):
     queryset = Organization.objects.all().order_by('dept_name')
     serializer_class = OrganizationSerializer
-    access_policy = OrganizationAccessPolicy
 
     # GETs all organizations that contain the queried string (if any)
     def get_queryset(self):

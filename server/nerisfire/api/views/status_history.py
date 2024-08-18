@@ -12,11 +12,12 @@ class ListStatusHistoryView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff:
+        all = self.request.query_params('all', None)
+        # if the user is staff and passes in the 'all' param, return all staus historys. Otherwise just return the users
+        if all and user.is_staff:
             queryset = StatusHistory.objects.all()
         else:
-            return StatusHistory.objects.filter(user=user)
-
+            queryset = StatusHistory.objects.filter(user=user)
 
         start_date = self.request.query_params.get('start_date', None)
         if start_date:

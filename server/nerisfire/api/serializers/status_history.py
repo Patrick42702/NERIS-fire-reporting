@@ -16,6 +16,5 @@ class StatusHistorySeralizer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         logger.debug("this is calling the create ranges method")
-        print("calling create ranges", flush=True)
         status_history = models.StatusHistory.create_ranges(**validated_data)
         return status_history

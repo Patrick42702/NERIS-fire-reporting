@@ -1,4 +1,4 @@
-from rest_access_policy import AccessPolicy, Statement
+from rest_access_policy import AccessPolicy
 from rest_framework import permissions
 # from base.models import OrganizationRole
 # import logging

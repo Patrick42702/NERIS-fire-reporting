@@ -9,15 +9,14 @@ class ListStatusHistoryView(generics.ListAPIView):
     queryset = StatusHistory.objects.all()
     serializer_class = StatusHistorySeralizer
     permission_classes = [permissions.IsAuthenticated]
-    ordering_fields = ['id']  # Fields that can be ordered
-    ordering = ['id']  # Default ordering
 
     def get_queryset(self):
-        queryset = StatusHistory.objects.all()
-        user_bool = self.request.query_params.get('user_bool', None)
-        if user_bool:
-            user = self.request.user
-            queryset = StatusHistory.objects.filter(user=user)
+        user = self.request.user
+        if user.is_staff:
+            queryset = StatusHistory.objects.all()
+        else:
+            return StatusHistory.objects.filter(user=user)
+
 
         start_date = self.request.query_params.get('start_date', None)
         if start_date:

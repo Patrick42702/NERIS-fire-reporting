@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth import get_user_model
 import uuid
 from django.conf import settings
 import datetime
@@ -135,7 +136,8 @@ class StatusHistory(models.Model):
         return status_history
 
     def __str__(self):
-        return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'
+        return f'STATUS: {self.status}, START_DATE: {self.start_date}, \
+                END_DATE: {self.end_date}, DURATION: {self.duration}'
 
 
 class Activity(models.Model):

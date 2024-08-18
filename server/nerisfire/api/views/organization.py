@@ -14,7 +14,7 @@ class CreateOrganizationView(generics.CreateAPIView):
     serializer_class = OrganizationSerializer
 
 # GET request -> list of all orgs
-class ListOrganizationView(AccessViewSetMixin, generics.ListAPIView):
+class ListOrganizationView(generics.ListAPIView):
     queryset = Organization.objects.all().order_by('dept_name')
     serializer_class = OrganizationSerializer
 

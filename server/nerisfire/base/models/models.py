@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger('api')
 
+
 class MemberManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -21,6 +22,7 @@ class MemberManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
+
 
 class Member(AbstractBaseUser):
     email = models.EmailField(unique=True)
@@ -73,7 +75,8 @@ class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     dept_name = models.CharField(max_length=255, default="")
     dept_phone = models.CharField(max_length=100, default="")
-    admin_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="organization", null=True)
+    admin_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="organization", null=True)
     location = models.CharField(max_length=255, blank=True)
     fdid = models.IntegerField(null=True, blank=True)
     verified = models.BooleanField(default=False, null=False)
@@ -91,8 +94,10 @@ class Organization(models.Model):
     def __str__(self):
         return self.dept_name
 
+
 class StatusHistory(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_history")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status_history")
     start_date = models.DateField()
     end_date = models.DateField()
     duration = models.DurationField(default=datetime.timedelta(hours=2))
@@ -132,32 +137,34 @@ class StatusHistory(models.Model):
     def __str__(self):
         return f'STATUS: {status}, START_DATE: {start_date}, END_DATE: {end_date}, DURATION: {duration}'
 
+
 class Activity(models.Model):
-    activity_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    activity_type = models.CharField(max_length=255, null=False)
+    activity_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     activity_date = models.DateTimeField(null=False)
+    account = models.CharField(max_length=255)
+    start_time = models.DateTimeField(null=False)
+    hours = models.DecimalField(max_digits=100, decimal_places=2)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
         return self.activity_type
 
-class Incident(models.Model):
-    activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
-    account = models.CharField(max_length=255)
+
+class Incident(Activity):
     station = models.IntegerField()
-    shift = models.CharField(max_length=255) # Assumed CharField
-    alarm_dt = models.CharField(max_length=255) # Assumed CharField
-    incident_type = models.CharField(max_length=255) # Assumed CharField
-    number = models.IntegerField() # Not sure if other paramaters
-    hours = models.DecimalField(max_digits=100, decimal_places=2)
+    shift = models.CharField(max_length=255)  # Assumed CharField
+    alarm_dt = models.CharField(max_length=255)  # Assumed CharField
+    incident_type = models.CharField(max_length=255)  # Assumed CharField
+    number = models.IntegerField()  # Not sure if other paramaters
 
     def __str__(self):
         return str(self.incident_type) + ":" + str(self.activity.activity_id)
 
+
 class Event(models.Model):
-    activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
-    account = models.CharField(max_length=255)
-    start_time = models.DateTimeField(null=False)
-    hours = models.DecimalField(max_digits=100, decimal_places=2)
     name = models.CharField(max_length=255, null=False)
     category = models.CharField(max_length=255)
     event_type = models.CharField(max_length=255)
@@ -165,18 +172,14 @@ class Event(models.Model):
     def __str__(self):
         return str(self.name) + ":" + str(self.activity.activity_id)
 
+
 class Class(models.Model):
-    activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
-    account = models.CharField(max_length=255)
     station = models.IntegerField()
     start_time = models.DateTimeField(null=False)
     name = models.CharField(max_length=255, null=False)
     category = models.CharField(max_length=255)
     train_cat = models.IntegerField()
     train_code = models.CharField(max_length=255)
-    hours = models.DecimalField(max_digits=100, decimal_places=2)
 
     def __str__(self):
         return str(self.name) + ":" + str(self.activity.activity_id)
-
-
